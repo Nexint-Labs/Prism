@@ -134,3 +134,66 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# ==========================================
+# Prism - Database and Runtime Files
+# ==========================================
+
+# Sequelize / SQLite databases
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+
+# SQLite journals and transaction files
+*.sqlite-journal
+*.sqlite3-journal
+*.db-journal
+
+# SQLite Write-Ahead Logging (WAL)
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
+*.db-wal
+*.db-shm
+
+# SQLite backup files
+*.sqlite.bak
+*.sqlite3.bak
+*.db.bak
+*.sqlite.backup
+*.db.backup
+
+# Database exports and dumps
+*.sql
+*.sql.gz
+*.dump
+
+# Runtime storage
+storage/
+data/
+backups/
+tmp/
+temp/
+
+# Environment files and secrets
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local development files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Local IDE configuration
+.idea/
+
+# Testing
+/store/*.txt
