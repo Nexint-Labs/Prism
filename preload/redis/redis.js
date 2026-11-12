@@ -1,5 +1,6 @@
 const { createClient } = require('redis');
 const { redisToken } = require('#config/api/RedisAPI');
+const verbose = process.argv.includes('--verbose');
 
 // 1. Build URI safely using template literals or URL encoding if credentials contain special characters
 const redisUrl = `rediss://default:${encodeURIComponent(redisToken)}@alert-jennet-81049.upstash.io:6379`;
@@ -20,11 +21,17 @@ const upstashPublisher = createClient({
 
 // 3. Register global event handlers before connecting
 upstashPublisher.on('connect', () => {
-    console.log('[Upstash] Socket connected.');
+    if (verbose) {
+        console.log('[Upstash] Socket connected.');
+
+    }
 });
 
 upstashPublisher.on('ready', () => {
-    console.log('[Upstash] Ready for Real-Time Team Chat Pub/Sub.');
+    if (verbose) {
+        console.log('[Upstash] Ready for Real-Time Team Chat Pub/Sub.');
+
+    }
 });
 
 upstashPublisher.on('error', (err) => {

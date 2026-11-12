@@ -1,10 +1,10 @@
 module.exports = {    
 
     // Do not change these. Used for version checking, command line functionality, and more.
-    version: "0.5.0",
-    versionID: 11, // nexint raw server version (index.js), plugins are updated independantly
-    botChannel: "dev",
-    fileCount: 77, // file count, if more files are added / removed the server detects the instance is modified
-    mikuVer: "0.5.0",
-    mikuChannel: "prod"
+    version: "0.6.0", // Framework Version
+    versionID: 12, // Version ID 
+    botChannel: "dev", // Framework Channel
+    fileCount: 2, // Detects if thse server instance is modified or not.
+    pluginVer: "0.5.1", // Plugin Version
+    pluginChannel: "prod" // Plugin Channel
 }

@@ -11,7 +11,7 @@ const { abbrevBalance } = require('#functions/v2/helpers/abbrevValues');
 const { checkBlacklist } = require('#functions/v2/auth/checkBlacklist');
 
 // config
-const { version, versionID, mikuVer, mikuChannel } = require('#config/core/update');
+const { version, versionID, pluginVer, pluginChannel, botChannel } = require('#config/core/update');
 const { botName } = require('#config/core/core');
 const { client, latestVersion } = require('#bot');
 const { loadAnim } = require('#functions/v2/helpers/load');
@@ -86,8 +86,8 @@ module.exports = {
 		// bot version
 		let ver = ""
 		ver += `**Bot Version:**\n`;
-		ver += `${botName} Version: ${mikuVer}-${mikuChannel} (More development to come!)\n`
-		ver += `PrismBot version: ${version} (Version ID: ${versionID}) / Latest version ID: ${latestVersion}.\n${outputMsg}\n\n`;
+		ver += `${botName} Version: ${pluginVer}-${pluginChannel} (More development to come!)\n`
+		ver += `Framework version: ${version}-${botChannel} (Version ID: ${versionID}) / Latest version ID: ${latestVersion}.\n${outputMsg}\n\n`;
 
 		// curency stats
 		let bal = ""

@@ -140,7 +140,5 @@ module.exports = {
         await punch.sync();
         await kill.sync();
         await action.sync();
-
-        console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] Fun DBs loaded!`);
     },
 };

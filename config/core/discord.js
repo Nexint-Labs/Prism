@@ -26,7 +26,7 @@ module.exports = {
     botActivity: "Thinking About You! | /help",
     botStatus: "online",
     botURL: "", // Bot's URL for streaming. Automatically credits me if the botType is streaming!
-    botType: ActivityType.Custom,
+    botType: ActivityType.Playing,
     footerText: `${botName} © ${date.getFullYear()}. · By @${devName}`,
     inviteChannelID: process.env.INVITE_CHANNEL_ID ?? "", // Optional
 

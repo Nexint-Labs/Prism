@@ -1,7 +1,7 @@
 // Sample code to import a client and other constants.
 
-const { restart } = require('#config/core/core');
-const { helpMenu, readline, spawn, exitHandler, server } = require('#index');
+const { restart, botName } = require('#config/core/core');
+const { helpMenu, readline, spawn, exitHandler, server, reloadAllCommands, reloadConsoleCommands } = require('#index');
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 module.exports = {
@@ -17,8 +17,9 @@ module.exports = {
             '/info (page) - Opens a neat info menu!',
             'This function can\'t be expanded upon by other plugins.',
             '/reload - Mirror of /refresh',
+            '/refresh - Refreshes commands, etc.',
             '/restart - Restarts the bot. Recommended when updating.',
-            '/r - Mirror of /restart',
+            '/rs - Mirror of /restart',
             '/stop - Closes bot.',
             '/end - Mirror of /stop.',
         ];
@@ -51,9 +52,19 @@ module.exports = {
                     'Version control:',
                     'The first number (X.0.0) is the major release.',
                     'The second number (0.X.0) is the minor release.',
-                    'The third number (0.0.X) is the build #.',
+                    'The third number (0.0.X) is the patch #.',
+                    'Breaking changes may occur between Prism 0.x releases.',
+                    'Compatibility is not guaranteed until v1.0.0.',
                     'Built-in plugins aside from "built-in" are typically',
                     'not updated as often, and may be unstable.',
+                    'What means what?',
+                    'Framework version is the version of the bot framework.',
+                    `${botName} version is the version of the plugins / deployment.`,
+                    'Dev is the dev instance, prod is the prod instance.',
+                    'Disclaimers:',
+                    'Third party plugins are not guaranteed to be supported.',
+                    'Prism is in active development and may introduce breaking changes.',
+                    'Have fun running this! - Nexint',
                 ];
                 if (command.split(" ")[1] != undefined) {
                     info = Number(parseInt(command.split(" ")[1].toLowerCase(), 10));
@@ -92,6 +103,13 @@ module.exports = {
                 })
                 child.unref()
                 await exitHandler();
+                return true;
+            case "/refresh":
+            case "/reload":
+                console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Reloading bot.');
+                await reloadAllCommands();
+                await reloadConsoleCommands();
+                console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Reload done.');
                 return true;
             default:
                 return false;

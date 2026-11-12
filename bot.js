@@ -6,7 +6,6 @@ global.DateFormatter = new Intl.DateTimeFormat(undefined, dateOptions); // Ensur
 
 // Startup variables.
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-let verbose = false;
 
 // Process arguments that change parts of how the bot works.
 // --log-disable: Disables any logging functionality of the bot. Useful if saving logs take up a lot of storage.
@@ -17,14 +16,13 @@ let verbose = false;
 // More are to be added in the future.
 let safeMode = false;
 let chatLog = false;
+const verbose = process.env.PRISM_VERBOSE === 'true';
 if (verbose) {
 	console.log("[" + DateFormatter.format(Date.now()) + '] [INFO]', `Verbose mode is enabled. Additional information will be given.`);
 }
 
 if (verbose) {
 	console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Loading config files and setup variables.');
-} else {
-	console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] Loading startup files and functions.`);
 }
 const errorFunction = function (err, origin) {
 	console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] Full stack trace:`);
@@ -54,14 +52,14 @@ const { spawn } = require('child_process');
 const { Client, Collection, Events, ActivityType } = require('discord.js');
 const { ClusterClient, getInfo, AutoResharderClusterClient } = require('discord-hybrid-sharding');
 const {
-    clientId,
-    discordToken: token,
-    intents,
-    partials,
-    botActivity,
-    botStatus,
-    botURL,
-    botType
+	clientId,
+	discordToken: token,
+	intents,
+	partials,
+	botActivity,
+	botStatus,
+	botURL,
+	botType
 } = require('#config/core/discord');
 
 // Get JS files Function
@@ -118,10 +116,8 @@ const getUpdateVersion = async () => {
 
 if (verbose) {
 	console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Scanning for javascript files to preload...');
-} else {
-	console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Loading external plugins, files, and commands.');
+	console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Be aware that I am not responsible for the actions external plugins do to modify server code.');
 }
-console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Be aware that I am not responsible for the actions external plugins do to modify server code.');
 
 // Main function!
 (async () => {
@@ -154,10 +150,17 @@ console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Be aware that I a
 
 	// Sets up the discord client and other collections.
 	const client = new Client({
-		shards: getInfo().SHARD_LIST, // An array of shards that will get spawned
-		shardCount: getInfo().TOTAL_SHARDS, // Total number of shards
-		intents: intents,
-		partials: partials
+		shards: getInfo().SHARD_LIST,
+		shardCount: getInfo().TOTAL_SHARDS,
+		intents,
+		partials,
+		presence: {
+			status: botStatus,
+			activities: [{
+				name: botActivity,
+				type: botType
+			}]
+		}
 	});
 
 	client.cluster = new ClusterClient(client);
@@ -209,27 +212,91 @@ console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Be aware that I a
 		console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] Cached ${commands.length} commands.`);
 	}
 
-	// Register globally once during ordinary startup, not from every cluster.
-	// For overlapping graceful reclusters, use a dedicated deployment-time
-	// command registration step instead of this worker-side registration.
-	let data = [];
-	if (client.cluster.id === 0) {
-		data = await rest.put(
-			Routes.applicationCommands(clientId),
-			{ body: commands },
-		);
-	}
-
 	if (verbose) {
-		console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] Successfully reloaded ${data.length} commands.`);
-	}
-
-	if (verbose) {
-		console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Client created.');
+		console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Shard created.');
 	}
 
 	client.cooldowns = new Collection();
 	client.commands = new Collection();
+
+	client.cluster.on('message', async message => {
+		if (message?.type === 'reloadCommands') {
+			try {
+				const count = await reloadCommands();
+
+				message.reply({
+					success: true,
+					count
+				});
+			} catch (error) {
+				console.error('Reload failed:', error);
+
+				message.reply({
+					success: false,
+					error: error.message
+				});
+			}
+
+			return;
+		}
+
+		if (message?.type === 'deployCommands' && client.cluster.id === 0) {
+			try {
+				const rest = new REST().setToken(token);
+
+				const commands = [...client.commands.values()]
+					.map(command => command.data.toJSON());
+
+				await rest.put(Routes.applicationCommands(clientId), {
+					body: commands
+				});
+
+				console.log(`Deployed ${commands.length} commands.`);
+
+				message.reply({
+					success: true,
+					count: commands.length
+				});
+			} catch (error) {
+				console.error('Deployment failed:', error);
+
+				message.reply({
+					success: false,
+					error: error.message
+				});
+			}
+		}
+	});
+
+	async function reloadCommands() {
+		const reloaded = new Collection();
+		const files = getJSFiles(pluginPath);
+
+		// Clear caches first, including shared plugin dependencies if needed.
+		for (const file of files) {
+			delete require.cache[require.resolve(file)];
+		}
+
+		for (const file of files) {
+			const command = require(file);
+
+			if (command.ready) await command.ready;
+
+			if (command.data && command.execute) {
+				reloaded.set(command.data.name, command);
+			}
+		}
+
+		// Replace the active command registry.
+		client.commands.clear();
+
+		for (const [name, command] of reloaded) {
+			client.commands.set(name, command);
+		}
+
+		console.log(`Reloaded ${reloaded.size} commands.`);
+		return reloaded.size;
+	}
 
 	if (verbose) {
 		console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Scanning for files.');
@@ -266,41 +333,44 @@ console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Be aware that I a
 		}
 	}
 	if (verbose) {
-		console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] ${count} files loaded.`);
-	} else {
-		console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] Finished loading ${count} files.`);
+		console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] ${count} plugins loaded.`);
 	}
 
 	// Actions the bot should do when it's ready.
 	// Even with the built in (custom coded) plugins, it still says the instance is modified.
 	client.once(Events.ClientReady, async readyClient => {
-		readyClient.cluster.triggerReady();
+
 		if (verbose) {
-			console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Client is ready.');
+			console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Shard is ready.', {
+				clusterId: client.cluster.id,
+				shardIds: [...client.ws.shards.keys()],
+				pid: process.pid
+			});
 		}
 		if (chatLog) {
-			client.user.setPresence({
+			await readyClient.user.setPresence({
 				activities: [{
 					name: "Bot spying Enabled! (Dev-mode)",
-					type: ActivityType.Custom,
+					type: ActivityType.Playing,
 					url: botURL
 				}],
 				status: botStatus
 			});
-		} else {
-			client.user.setPresence({
-				activities: [{
-					name: botActivity,
-					type: botType,
-					url: botURL
-				}],
-				status: botStatus
+		}
+		if (verbose) {
+			console.log("[DEBUG] Presence after setting:", {
+				status: client.user.presence.status,
+				activities: client.user.presence.activities.map(a => ({
+					name: a.name,
+					type: a.type
+				}))
 			});
 		}
 		if (verbose) {
 			console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Client status set. Change this in /config.js!');
 		}
 		asyncFunctions();
+		readyClient.cluster.triggerReady();
 
 	});
 	await delay(1000);

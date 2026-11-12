@@ -4,7 +4,7 @@ require('dotenv').config();
 
 // Date Formatter. Used for formatting dates on logs.
 // More customizable way of formatting all the bot logs at the same time.
-const { dateOptions, logFormat, botName } = require('#config/core/core');
+const { dateOptions, logFormat, botName, devMode } = require('#config/core/core');
 global.DateFormatter = new Intl.DateTimeFormat(undefined, dateOptions); // Ensures a global Date Formatter usable in any bot.
 console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Starting up...');
 
@@ -94,19 +94,36 @@ const { spawn } = require('child_process');
 const { Client, Collection, Events, ActivityType } = require('discord.js');
 
 const {
-    clientId,
-    discordToken: token,
-    intents,
-    partials,
-    botActivity,
-    botStatus,
-    botURL,
-    botType
+	clientId,
+	discordToken: token,
+	intents,
+	partials,
+	botActivity,
+	botStatus,
+	botURL,
+	botType
 } = require('#config/core/discord');
 
 const { version, versionID, fileCount } = require('#config/core/update');
 const fetch = (url, init) => import('node-fetch').then(module => module.default(url, init));
+let reloadHandler;
+let reloadConsoleHandler;
 
+const reloadAllCommands = async (...args) => {
+	if (!reloadHandler) {
+		throw new Error('Reload handler is not initialized.');
+	}
+
+	return reloadHandler(...args);
+};
+
+const reloadConsoleCommands = async (...args) => {
+	if (!reloadConsoleHandler) {
+		throw new Error('Reload console is not initialized.');
+	}
+
+	return reloadConsoleHandler(...args);
+};
 try {
 	process.chdir(__dirname);
 	console.log(`New directory: ${process.cwd()}`);
@@ -289,6 +306,8 @@ const main = async () => {
 		exitHandler,
 		chatLog: chatLog,
 		latestVersion: latestVersion,
+		reloadAllCommands,
+		reloadConsoleCommands,
 	}
 
 	// More constants that may depend on folders existing.
@@ -304,9 +323,11 @@ const main = async () => {
 				if (command.ready) {
 					await command.ready;
 				}
-				if ('execute' in command) {
+				if (typeof command.execute === 'function') {
 					await command.execute();
-				} else if ('help' in command) {
+				}
+
+				if (typeof command.help === 'function') {
 					helpMenu.push(...command.help());
 				}
 			}
@@ -320,22 +341,98 @@ const main = async () => {
 	// Scan for plugins. The command list here is used by the rest of the bot.
 
 	const { ClusterManager, AutoResharderManager, ReClusterManager } = require('discord-hybrid-sharding');
-
+	process.env.PRISM_VERBOSE = String(verbose);
+	let totalShards = "auto", shardsPerClusters = 2;
+	if (devMode) {
+		totalShards = 4;
+		shardsPerClusters = 1;
+	}
 	const manager = new ClusterManager(`${__dirname}/bot.js`, {
-		totalShards: 'auto', // or numeric shard count
-		/// Check below for more options
-		shardsPerClusters: 2, // 2 shards per process
-		// totalClusters: 7,
-		mode: 'process', // you can also choose "worker"
-		token: token,
+		totalShards,
+		shardsPerClusters,
+		mode: 'process',
+		token,
+		clusterData: {
+			verbose
+		}
 	});
+
+	reloadHandler = async function () {
+		console.log('Reloading commands across all clusters...');
+
+		const results = await Promise.all(
+			[...manager.clusters.values()].map(cluster =>
+				cluster.request({ type: 'reloadCommands' })
+			)
+		);
+
+		// Verify that every cluster succeeded.
+		for (const result of results) {
+			if (!result.success) {
+				throw new Error(`Cluster reload failed: ${result.error}`);
+			}
+		}
+
+		console.log('All clusters reloaded successfully.');
+
+		// Only deploy after every cluster has confirmed completion.
+		const deployment = await manager.clusters.get(0).request({
+			type: 'deployCommands'
+		});
+
+		if (!deployment.success) {
+			throw new Error(`Deployment failed: ${deployment.error}`);
+		}
+
+		console.log(`Successfully deployed ${deployment.count} commands.`);
+	};
+
+	reloadConsoleHandler = async function () {
+		const newCommandList = [];
+		const newHelpMenu = [];
+
+		// Discover console plugin files.
+		for (const folder of fs.readdirSync(preloadPath)) {
+			const folderPath = path.join(preloadPath, folder);
+
+			if (!fs.statSync(folderPath).isDirectory()) continue;
+
+			for (const file of fs.readdirSync(folderPath)) {
+				if (!file.endsWith('.js')) continue;
+
+				newCommandList.push(path.join(folderPath, file));
+			}
+		}
+
+		// Invalidate cached console modules.
+		for (const file of newCommandList) {
+			delete require.cache[require.resolve(file)];
+		}
+
+		// Load updated modules.
+		for (const file of newCommandList) {
+			const plugin = require(file);
+
+			if (plugin.ready) await plugin.ready;
+
+			if (typeof plugin.help === 'function') {
+				newHelpMenu.push(...plugin.help());
+			}
+		}
+
+		// Replace registries without changing array references.
+		commandList.splice(0, commandList.length, ...newCommandList);
+		helpMenu.splice(0, helpMenu.length, ...newHelpMenu);
+
+		console.log(`Reloaded ${commandList.length} console plugin files.`);
+	}
 
 	manager.extend(
 		new ReClusterManager()
 	)
 
 	manager.extend(
-		new AutoResharderManager(this.cluster, {
+		new AutoResharderManager({
 			/* If you need a debug information*/
 			debug: true,
 			/* how many shards per cluster should be spawned */
@@ -359,14 +456,29 @@ const main = async () => {
 		})
 	);
 
-	manager.on('clusterCreate', cluster => console.log(`Launched Cluster ${cluster.id}`));
+	manager.on('clusterCreate', cluster => {
+		console.log(`Launched Cluster ${cluster.id}`);
 
-	manager
+		cluster.on('death', () => {
+			console.log(`Cluster ${cluster.id} died`);
+		});
+
+		cluster.on('spawn', () => {
+			console.log(`Cluster ${cluster.id} spawned`);
+		});
+
+		cluster.on('ready', () => {
+			console.log(`Cluster ${cluster.id} ready`);
+		});
+	});
+
+	await manager
 		.spawn({ timeout: -1 })
-		.then((shards) => {
+		.then(async (shards) => {
 			if (verbose) {
-				console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Shard is ready.');
+				console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] Manager is ready.');
 			}
+			await asyncFunctions();
 
 			// Logs the custom startup message.
 			console.log("[" + DateFormatter.format(Date.now()) + '] [INFO]', '\x1b[36m----------------------------------------------------\x1b[0m');
@@ -392,7 +504,7 @@ const main = async () => {
 			} else {
 				updateCheck();
 			}
-			+			manager.broadcastEval(c => ({ username: c.user?.username, discriminator: c.user?.discriminator }))
+			manager.broadcastEval(c => ({ username: c.user?.username, discriminator: c.user?.discriminator }))
 				.then(usernames => {
 					// The result is an array of usernames from each shard
 					// Since the username is the same for all shards, you can take the first one
@@ -409,8 +521,15 @@ const main = async () => {
 			} else {
 				console.log("[" + DateFormatter.format(Date.now()) + '] [INFO]', `Verbose mode is disabled. Verbose mode needs to be enabled to report bugs.`);
 			}
-			asyncFunctions();
 		});
+	const cluster0 = manager.clusters.get(0);
+	const result = await cluster0.request({
+		type: 'deployCommands'
+	});
+
+	if (!result.success) {
+		throw new Error(result.error);
+	}
 
 };
 
@@ -450,17 +569,26 @@ const commandParser = async () => {
 			outputFileStream.write(command + '\n');
 		}
 		let validCommand = false;
-		for (let i = 0; i < commandList.length; i++) {
-			const cmd = require(commandList[i]);
-			if ('command' in cmd) {
-				if (verbose) {
-					console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] Loading the commands in "${commandList[i]}".`);
-				}
-				validCommand = await cmd.command(command);
-				if (validCommand) {
-					i = commandList.length; // Skip processing more commands if one is valid. Saves time.
-				}
+		for (const file of [...commandList]) {
+			const cmd = require(file);
+
+			if (typeof cmd.command !== 'function') continue;
+
+			if (verbose) {
+				console.log(`[${DateFormatter.format(Date.now())}] [INFO] Loading commands in "${file}".`);
 			}
+			try {
+				validCommand = await cmd.command(command);
+			} catch (error) {
+				console.error(
+					`[${DateFormatter.format(Date.now())}] [ERROR] Console command failed:`,
+					error
+				);
+
+				validCommand = true;
+			}
+
+			if (validCommand) break;
 		}
 		if (validCommand == false) {
 			console.log("[" + DateFormatter.format(Date.now()) + '] [INFO] This command is not a valid command.');
