@@ -96,7 +96,7 @@ let count = 0;
 const getUpdateVersion = async () => {
 	try {
 		if (!safeMode) {
-			const update = await fetch('https://raw.githubusercontent.com/Nexints/open-bot/refs/heads/main/config.js');
+			const update = await fetch('https://raw.githubusercontent.com/Nexint-Labs/Prism/refs/heads/main/config/core/update.js');
 			const tmp = await update.text();
 			let version = 0;
 			for (let i = 0; i < tmp.split("\n").length; i++) {

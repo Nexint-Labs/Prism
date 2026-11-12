@@ -180,7 +180,7 @@ if (verbose) {
 const getUpdateVersion = async () => {
 	try {
 		if (!safeMode) {
-			const update = await fetch('https://raw.githubusercontent.com/Nexints/open-bot/refs/heads/main/config.js');
+			const update = await fetch('https://raw.githubusercontent.com/Nexint-Labs/Prism/refs/heads/main/config/core/update.js');
 			const tmp = await update.text();
 			let version = 0;
 			for (let i = 0; i < tmp.split("\n").length; i++) {
@@ -202,7 +202,7 @@ const getUpdateVersion = async () => {
 const updateCheck = () => {
 	if (versionID < latestVersion) {
 		console.log("[" + DateFormatter.format(Date.now()) + '] [WARN]', `You're running an outdated version of this bot! (You are ${latestVersion - versionID} commits behind)`);
-		console.log("[" + DateFormatter.format(Date.now()) + '] [WARN]', `Update now at https://github.com/Nexints/open-bot to make sure that your bot has the latest security fixes!`);
+		console.log("[" + DateFormatter.format(Date.now()) + '] [WARN]', `Update now at https://github.com/Nexint-Labs/Prism to make sure that your bot has the latest security fixes!`);
 		if ((latestVersion - versionID) >= 5) {
 			console.log("[" + DateFormatter.format(Date.now()) + '] [WARN]', `You are over 5 commits behind. Update to the latest version as soon as possible.`);
 		}

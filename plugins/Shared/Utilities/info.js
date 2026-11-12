@@ -87,7 +87,7 @@ module.exports = {
 		let ver = ""
 		ver += `**Bot Version:**\n`;
 		ver += `${botName} Version: ${mikuVer}-${mikuChannel} (More development to come!)\n`
-		ver += `OpenBot version: ${version} (Version ID: ${versionID}) / Latest version ID: ${latestVersion}.\n${outputMsg}\n\n`;
+		ver += `PrismBot version: ${version} (Version ID: ${versionID}) / Latest version ID: ${latestVersion}.\n${outputMsg}\n\n`;
 
 		// curency stats
 		let bal = ""

@@ -14,6 +14,8 @@ module.exports = {
     intents: [ // Gateway events the bot subscribes to
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMembers,
         GatewayIntentBits.DirectMessages,
     ],
     partials: [ // Partial events the bot subscribes to

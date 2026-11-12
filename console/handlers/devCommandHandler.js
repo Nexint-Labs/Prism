@@ -1,5 +1,6 @@
 const { version, versionID, botChannel, mikuVer, mikuChannel } = require('#config/core/update');
 const { botName } = require('#config/core/core');
+const { latestVersion } = require('#index');
 
 module.exports = {
     // Example of a help menu given by the bot.
@@ -27,7 +28,7 @@ module.exports = {
                     case 'version':
                         console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] Printing the version`);
                         console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] ${botName}Bot Version: ${mikuVer}.`);
-                        console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] OpenBot Version: ${version} (Version ID: ${versionID}) / Latest version ID: ${latestVersion}.`);
+                        console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] Prism Version: ${version} (Version ID: ${versionID}) / Latest version ID: ${latestVersion}.`);
                         if (latestVersion > versionID) {
                             console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] ${latestVersion - versionID} commits behind.`);
                         } else if (latestVersion == 0) {
@@ -43,7 +44,7 @@ module.exports = {
                     case 'build':
                         console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] Printing the build!`);
                         console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] ${botName}Bot v${mikuVer}-${mikuChannel}.`);
-                        console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] OpenBot v${version}-${botChannel}.`);
+                        console.log("[" + DateFormatter.format(Date.now()) + `] [INFO] Prism v${version}-${botChannel}.`);
                         console.log("[" + DateFormatter.format(Date.now()) + '] [INFO]', '\x1b[36m--------------------- Nex 2025 ---------------------\x1b[0m');
                         break;
                     default:
