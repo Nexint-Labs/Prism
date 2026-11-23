@@ -11,13 +11,13 @@ const { postAPI } = require('#functions/discord/api/fetch');
 const { pluralValues } = require('#functions/discord/core/pluralValues');
 
 module.exports = {
-	cooldown: 5,
-	data: new ContextMenuCommandBuilder()
+    cooldown: 5,
+    data: new ContextMenuCommandBuilder()
         .setName('Boop!')
         .setType(3)
         .setIntegrationTypes([0, 1])
         .setContexts([0, 1, 2]),
-	async execute(interaction) {
+    async execute(interaction) {
         // defer Reply
         const embedMessage = await interaction.deferReply({
             withResponse: true,
@@ -48,14 +48,14 @@ module.exports = {
             "Finding Gif...",
         ], true)
 
-		// Opt-out check
-		let optedOut = await optOutChk(interaction.user, interaction.targetMessage.author);
+        // Opt-out check
+        let optedOut = await optOutChk(interaction.user, interaction.targetMessage.author);
 
-		// Add to analytics
-		addCommandsUsed(interaction.user);
+        // Add to analytics
+        addCommandsUsed(interaction.user);
 
-		// Search for gif
-		const results = await searchGif("anime poke")
+        // Search for gif
+        const results = await searchGif("anime poke")
 
         // Handle null
         if (results == null) {
@@ -74,9 +74,9 @@ module.exports = {
             return
         }
 
-		// Description?
-		let description = `One of you has opted out of data collection.`;
-		if (!optedOut) {
+        // Description?
+        let description = `One of you has opted out of data collection.`;
+        if (!optedOut) {
 
             let findAction = await postAPI(
                 '/actions/updateAction',
@@ -86,17 +86,19 @@ module.exports = {
                     type: "boop",
                 }
             );
-            if(findAction.error){
+            if (findAction.error) {
                 findAction = {
                     error: true,
-                    value: "(API Unavailable)"
+                    content: {
+                        value: "(API Unavailable)"
+                    }
                 }
             }
-			description = `${interaction.user.displayName} has booped ${interaction.targetMessage.author.displayName} ${findAction.value} time${pluralValues(findAction.value)}! ༼ つ ◕_◕ ༽つ\n`;
-		}
+            description = `${interaction.user.displayName} has booped ${interaction.targetMessage.author.displayName} ${findAction.content.value} time${pluralValues(findAction.content.value)}! ༼ つ ◕_◕ ༽つ\n`;
+        }
 
-		// Title?
-		let title = `${interaction.user.displayName} boops ${interaction.targetMessage.author.displayName}! ༼ つ ◕_◕ ༽つ`;
+        // Title?
+        let title = `${interaction.user.displayName} boops ${interaction.targetMessage.author.displayName}! ༼ つ ◕_◕ ༽つ`;
 
         // Send gif
         await replyGifContainer(
@@ -106,6 +108,6 @@ module.exports = {
             results.url,
             results.shortURL
         )
-		return;
-	},
+        return;
+    },
 };

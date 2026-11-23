@@ -102,10 +102,12 @@ module.exports = {
                     type: "punch",
                 }
             );
-            if(findAction.error){
+            if (findAction.error) {
                 findAction = {
                     error: true,
-                    value: "(API Unavailable)"
+                    content: {
+                        value: "(API Unavailable)"
+                    }
                 }
             }
 			description = `${interaction.user.displayName} has punched ${interaction.options.getUser("user").displayName} ${findAction.content.value} time${pluralValues(findAction.content.value)}...`;

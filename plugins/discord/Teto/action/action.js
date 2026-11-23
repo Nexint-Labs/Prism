@@ -119,10 +119,12 @@ module.exports = {
                     type: interaction.options.getString("action"),
                 }
             );
-            if(findAction.error){
+            if (findAction.error) {
                 findAction = {
                     error: true,
-                    value: "(API Unavailable)"
+                    content: {
+                        value: "(API Unavailable)"
+                    }
                 }
             }
             description = `${interaction.user.displayName} has ${actionProcessed}'d ${interaction.options.getUser("user").displayName} ${findAction.content.value} time${pluralValues(findAction.content.value)}!`;

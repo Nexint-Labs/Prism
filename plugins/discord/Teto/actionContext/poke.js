@@ -86,13 +86,15 @@ module.exports = {
                     type: "poke",
                 }
             );
-            if(findAction.error){
+            if (findAction.error) {
                 findAction = {
                     error: true,
-                    value: "(API Unavailable)"
+                    content: {
+                        value: "(API Unavailable)"
+                    }
                 }
             }
-			description = `${interaction.user.displayName} has poked ${interaction.targetMessage.author.displayName} ${findAction.value} time${pluralValues(findAction.value)}! ༼ つ ◕_◕ ༽つ\n-# Via Klipy API.`;
+			description = `${interaction.user.displayName} has poked ${interaction.targetMessage.author.displayName} ${findAction.content.value} time${pluralValues(findAction.content.value)}! ༼ つ ◕_◕ ༽つ\n-# Via Klipy API.`;
 		}
 
 		// Title?
