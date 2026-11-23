@@ -21,7 +21,7 @@ const deployCommands = async function (dir, rest) {
     for (const file of files) {
 
         // Only load JS files (trust)
-        if (file.includes(".js")) {
+        if ([".js", ".cjs", ".mjs"].includes(path.extname(file).toLowerCase())) {
 
             // Execute the plugin?
             try {
@@ -78,7 +78,7 @@ const loadCommands = async function (dir, client) {
     for (const file of files) {
 
         // Only load JS files (trust)
-        if (file.includes(".js")) {
+        if ([".js", ".cjs", ".mjs"].includes(path.extname(file).toLowerCase())) {
 
             // Execute the plugin?
             try {

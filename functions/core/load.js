@@ -16,7 +16,7 @@ const load = async function (dir) {
     for (const file of files) {
 
         // Only load JS files (trust)
-        if (file.includes(".js")) {
+        if ([".js", ".cjs", ".mjs"].includes(path.extname(file).toLowerCase())) {
 
             // Execute the plugin?
             try {
@@ -59,7 +59,7 @@ const loadConsole = async function (dir, command) {
     for (const file of files) {
 
         // Only load JS files (trust)
-        if (file.includes(".js")) {
+        if ([".js", ".cjs", ".mjs"].includes(path.extname(file).toLowerCase())) {
 
             // Load the console command?
             try {
@@ -104,7 +104,7 @@ const loadHelp = async function (dir) {
     for (const file of files) {
 
         // Only load JS files (trust)
-        if (file.includes(".js")) {
+        if ([".js", ".cjs", ".mjs"].includes(path.extname(file).toLowerCase())) {
 
             // Load the help menu?
             try {
@@ -142,7 +142,7 @@ const close = async function (dir) {
     for (const file of files) {
 
         // Only load JS files (trust)
-        if (file.includes(".js")) {
+        if ([".js", ".cjs", ".mjs"].includes(path.extname(file).toLowerCase())) {
 
             try {
                 // Load the help menu?
@@ -187,7 +187,7 @@ const refresh = async function (dir) {
     for (const file of files) {
 
         // Only load JS files (trust)
-        if (file.includes(".js")) {
+        if ([".js", ".cjs", ".mjs"].includes(path.extname(file).toLowerCase())) {
 
             try {
                 // Load the help menu?
