@@ -1,4 +1,3 @@
-const { wss } = require('#apps/web');
 const { frameName, frameVer, frameID } = require('#config/core/core');
 const { pluginName, pluginVer } = require('#config/cosmetic/config');
 const { date } = require('#functions/core/date');
