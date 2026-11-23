@@ -25,7 +25,7 @@ module.exports = {
 	async execute(interaction) {
 		const userId = interaction.options.getString("user", true);
 		const targetMember = null;
-		const targetUser = await msg.client.users.fetch(userId).catch(() => ({ id: userId }));
+		const targetUser = await interaction.client.users.fetch(userId).catch(() => ({ id: userId }));
 		let reason;
 		if (interaction.options.getString('reason') == null) {
 			reason = "No reason given.";
