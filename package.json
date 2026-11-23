@@ -30,7 +30,7 @@
     "#preload/*": "./preload/*.js",
     "#console/*": "./console/*.js",
     "#bot": "./bot.js",
-    "#index": "./index.js",
+    "#index": "./boot.js",
     "#apps/*": "./apps/*.js",
     "#appHelpers/*": "./appHelpers/*.js"
   }
