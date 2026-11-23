@@ -1,8 +1,9 @@
+const { wss } = require('#apps/web');
 const { frameName, frameVer, frameID } = require('#config/core/core');
 const { pluginName, pluginVer } = require('#config/cosmetic/config');
 const { date } = require('#functions/core/date');
 const { log, getInfo, getSuccess, getWarn, getError, getFatal, getEvent } = require('#functions/core/log.mjs');
-const { getUpdateVersion } = require('#index');
+const { getUpdateVersion } = require('#functions/core/update');
 
 module.exports = {
     // Example of a help menu given by the bot.

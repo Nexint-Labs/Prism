@@ -11,32 +11,14 @@ const { log } = require('#functions/core/log.mjs');
 log.event("Loading configs... If this bot stops here, something went seriously wrong!")
 
 // Load configs (that actually matter)
-const { frameVer, autoUpdate, frameID, updateURL, frameName, errorPolicy } = require('#config/core/core');
+const { frameVer, autoUpdate, frameName, errorPolicy } = require('#config/core/core');
 const { load, loadConsole } = require('#functions/core/load');
 const delay = require("#functions/core/delay");
 
-// Update Checking
+// Other cool stuff :)
 const { date } = require('#functions/core/date');
-const { getUpdateVersion } = require('#functions/core/update');
+const { updateCheck } = require('#functions/core/update');
 const { gracefulShutdown } = require('#functions/core/powerCycle');
-const updateCheck = async function () {
-    let latestVersion = await getUpdateVersion();
-
-    if (frameID < latestVersion) {
-        log.warn(`You're running an outdated version of ${frameName}! (You are ${latestVersion - frameID} commits behind)`)
-        log.warn(`Update now at ${updateURL} to make sure that ${frameName} has the latest security fixes!`)
-        if ((latestVersion - frameID) >= 5) {
-            log.warn(`You are over 5 commits behind. Update to the latest version as soon as possible.`)
-        }
-    } else if (latestVersion == 0) {
-        log.warn("Update systems seem to be failing.")
-    } else if (frameID > latestVersion) {
-        log.warn(`You're running an experimental version of ${frameName}! (You are ${frameID - latestVersion} commits ahead)`)
-        log.warn(`Here be dragons!~`)
-    } else {
-        log.success(`You're running the latest version of ${frameName}!`)
-    }
-}
 
 // Prepare the console
 const readline = require('node:readline');
@@ -58,7 +40,6 @@ module.exports = {
     startLoad,
     readline: rl,
     sourceDir: __dirname,
-    getUpdateVersion,
 }
 
 // Process.on random unhandled stuff
@@ -168,7 +149,7 @@ const main = async () => {
     log.success(`Done in ${(Date.now() - startLoad) / 1000} seconds!`)
     console.log("Bot is running.")
 
-    await updateCheck()
+    await updateCheck(true)
 
     // real?
     await asyncFunctions();
@@ -210,6 +191,6 @@ const commandParser = async () => {
 const autoUpdateCheck = async () => {
     while (consoleOpen) {
         await delay(3600000); // artificial delay to ensure host's CPU doesn't die
-        updateCheck();
+        updateCheck(false);
     }
 }
