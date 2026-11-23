@@ -191,9 +191,9 @@ module.exports = {
 			// Prepare message
 			let msg = "";
 			if (shortened) {
-				msg = `You decided to coinflip ${addedCoins.displayValue} coin${pluralValues(addedCoins.value)} and landed ${coinToss}, doubling your coins.\nYour updated balance: ${newCoinAmt.value} coin${pluralValues(newCoinAmt.value)}.`
+				msg = `You decided to coinflip ${addedCoins.displayValue} coin${pluralValues(addedCoins.value)} and landed ${coinToss}, doubling your coins.\nYour updated balance: ${newCoinAmt.displayValue} coin${pluralValues(newCoinAmt.value)}.`
 				if (addedCoins.value < 0) {
-					msg = `You decided to coinflip ${(await abbrevBalance(addedCoins.value * -1)).displayValue} coin${pluralValues(addedCoins.displayValue)} and landed ${coinToss}, losing all of your wagered coin${pluralValues(newCoinAmt.value)}.\nYour updated balance: ${newCoinAmt.displayValue} coin${pluralValues(newCoinAmt.value)}.`
+					msg = `You decided to coinflip ${(abbrevBalance(addedCoins.value * -1)).displayValue} coin${pluralValues(addedCoins.displayValue)} and landed ${coinToss}, losing all of your wagered coin${pluralValues(newCoinAmt.value)}.\nYour updated balance: ${newCoinAmt.displayValue} coin${pluralValues(newCoinAmt.value)}.`
 				}
 			} else {
 				msg = `You decided to coinflip ${addedCoins.value} coin${pluralValues(addedCoins.value)} and landed ${coinToss}, doubling your coins.\nYour updated balance: ${newCoinAmt.value} coin${pluralValues(newCoinAmt.value)}.`
