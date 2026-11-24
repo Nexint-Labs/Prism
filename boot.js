@@ -101,7 +101,7 @@ const init = async function () {
     // Make sure directories exist lol
     const fs = require('node:fs');
     const path = require('path');
-    const dirs = ["plugins", "preload", "console", "databases", "apps", "functions", "logs"];
+    const dirs = ["plugins", "preload", "console", "databases", "apps", "functions", "logs", "test"];
     dirs.forEach((dir) => {
         if (!fs.existsSync(dir)) {
             log.info(`Creating directory: ${dir}`);

@@ -6,11 +6,52 @@ const { forceShutdown } = require("./fatalShutdown.mjs");
 
 
 /**
+ * Find files
+ * This runs the execute function.
+ * @param {String} dir 
+ * @returns
+ */
+const queryFiles = async function (dir) {
+    let count = 0;
+
+    const files = fs.readdirSync(path.join(process.cwd(), dir), { recursive: true });
+    for (const file of files) {
+
+        // Only load JS files (trust)
+        if ([".js", ".cjs", ".mjs"].includes(path.extname(file).toLowerCase())) {
+
+            // Execute the plugin?
+            try {
+                const plugin = require(path.join(process.cwd(), dir, file));
+                if ('execute' in plugin || 'command' in plugin) { // Discord fix lol
+                    count += 1;
+                }
+            } catch (error) {
+
+                if (errorPolicy.uncaughtException === "continue") {
+                    continue;
+                } else if (errorPolicy.uncaughtException === "warn") {
+                    log.error("Failed to load files.")
+                    log.error(`Problematic file: ${path.join(dir, file)}`, error)
+                    continue;
+                } else {
+                    log.error("Failed to load files.")
+                    log.error(`Problematic file: ${path.join(dir, file)}`, error)
+                    await forceShutdown("Failed to load files.")
+                }
+            }
+        }
+    }
+    return count;
+}
+
+/**
  * Load files in a specific directory.
  * This runs the execute function.
  * @param {String} dir 
  */
 const load = async function (dir) {
+    let count = 0;
 
     const files = fs.readdirSync(path.join(process.cwd(), dir), { recursive: true });
     for (const file of files) {
@@ -23,6 +64,7 @@ const load = async function (dir) {
                 const plugin = require(path.join(process.cwd(), dir, file));
                 if ('execute' in plugin && !('data' in plugin)) { // Discord fix lol
                     await plugin.execute();
+                    count += 1;
                     if (verbose) {
                         log.info(`Loaded file: ${path.join(dir, file)}`)
                     }
@@ -43,6 +85,7 @@ const load = async function (dir) {
             }
         }
     }
+    return count;
 }
 
 /**
@@ -222,5 +265,6 @@ module.exports = {
     loadConsole,
     loadHelp,
     close,
-    refresh
+    refresh,
+    queryFiles
 }

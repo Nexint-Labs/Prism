@@ -1,4 +1,4 @@
-const { clearFunctions, clearPrismCache } = require("./clearCache");
+const { clearDirectory } = require("./clearCache");
 const { date } = require("./date");
 const { close, refresh, load } = require("./load");
 const { log } = require("./log.mjs");
@@ -90,7 +90,12 @@ const reload = async function (cause) {
         } else {
             log.success("Apps have been taken temporarily offline.");
         }
-        const cleared = clearPrismCache();
+
+        let cleared = 0;
+        const clearedDirs = ["apps", "plugins", "functions", "test", "config", "console"]
+        for (const dir of clearedDirs) {
+            cleared += clearDirectory(dir)
+        }
         log.success(`Cleared ${cleared} files!`)
 
         // Load apps and plugins
@@ -124,7 +129,12 @@ const refreshCycle = async function (cause) {
         log.event(`Refresh triggered by: ${cause}`)
 
         // Start refreshing
-        const cleared = clearFunctions()
+
+        let cleared = 0;
+        const clearedDirs = ["functions", "config", "console"]
+        for (const dir of clearedDirs) {
+            cleared += clearDirectory(dir)
+        }
         log.success(`Cleared ${cleared} files!`)
         let success = true;
         let dirs = ["apps"];

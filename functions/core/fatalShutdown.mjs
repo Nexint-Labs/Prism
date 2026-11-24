@@ -124,7 +124,7 @@ const forceShutdown = async function (cause) {
         if (!success) {
             log.error("One or more components failed to close.");
         } else {
-            log.info("All components closed successfully.");
+            log.event("All components closed successfully.");
         }
     } catch (error) {
         log.error("Prism could not be force shut down properly.", error)
