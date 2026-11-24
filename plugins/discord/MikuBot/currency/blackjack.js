@@ -364,7 +364,7 @@ module.exports = {
 				}
 			} else {
 				if (shortened) {
-					msg = `You have bet ${(abbrevBalance(transfer)).displayValue} ${prefix(transfer)}}.\n\nDealer: ${dealer.cards[0]}, ???\nPlayer: ${playercards} (${player.cardTotal})`;
+					msg = `You have bet ${(abbrevBalance(transfer)).displayValue} ${prefix(transfer)}.\n\nDealer: ${dealer.cards[0]}, ???\nPlayer: ${playercards} (${player.cardTotal})`;
 				} else {
 					msg = `You have bet ${transfer} ${prefix(transfer)}}.\n\nDealer: ${dealer.cards[0]}, ???\nPlayer: ${playercards} (${player.cardTotal})`;
 				}
