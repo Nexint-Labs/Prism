@@ -62,40 +62,40 @@ module.exports = {
 		let guildMember = interaction.user;
 
 		// Calculate wager
-        let addedCoins;
+		let addedCoins;
 
-        if (interaction.options.getInteger("zeros") === null) {
-            addedCoins = interaction.options.getInteger("coins");
-        } else {
-            addedCoins = interaction.options.getInteger("coins") * Math.pow(10, interaction.options.getInteger("zeros"));
-        }
+		if (interaction.options.getInteger("zeros") === null) {
+			addedCoins = interaction.options.getInteger(prefix(0, false, false));
+		} else {
+			addedCoins = interaction.options.getInteger(prefix(0, false, false)) * Math.pow(10, interaction.options.getInteger("zeros"));
+		}
 
-        if (interaction.options.getString("all") === "true") {
-            const result = await queryAPI("/currency/update/balance", {
-                userId: guildMember.id,
-                name: getUsername(guildMember)
-            });
+		if (interaction.options.getString("all") === "true") {
+			const result = await queryAPI("/currency/update/balance", {
+				userId: guildMember.id,
+				name: getUsername(guildMember)
+			});
 
-            if (result.error) {
-                await replyContainer(
-                    interaction,
-                    "API Error",
-                    ["Could not retrieve your balance."],
-                    "warn",
-                    warning,
-                    {
-                        advert: false
-                    }
-                );
-                return;
-            }
+			if (result.error) {
+				await replyContainer(
+					interaction,
+					"API Error",
+					[`Could not retrieve your ${prefix(0)}.`],
+					"warn",
+					warning,
+					{
+						advert: false
+					}
+				);
+				return;
+			}
 
-            addedCoins = result.content.value;
-        }
+			addedCoins = result.content.value;
+		}
 
-        if (addedCoins === null || isNaN(addedCoins)) {
-            addedCoins = 0;
-        }
+		if (addedCoins === null || isNaN(addedCoins)) {
+			addedCoins = 0;
+		}
 
 		if (!Number.isFinite(addedCoins) || addedCoins <= 0) {
 			await replyContainer(
@@ -113,53 +113,53 @@ module.exports = {
 
 		const stake = addedCoins;
 
-        // Snake eyes logic
-        let rng = Math.floor(Math.random() * 6) + 1;
-        let rng2 = Math.floor(Math.random() * 6) + 1;
+		// Snake eyes logic
+		let rng = Math.floor(Math.random() * 6) + 1;
+		let rng2 = Math.floor(Math.random() * 6) + 1;
 
-        if (rng < 2 && rng2 < 2) {
-            addedCoins *= 24;
-        } else if (rng != rng2) {
-            addedCoins *= -1;
-        }
+		if (rng < 2 && rng2 < 2) {
+			addedCoins *= 24;
+		} else if (rng != rng2) {
+			addedCoins *= -1;
+		}
 
-        // Settle wager through NexAPI
-        const result = await postAPI("/currency/update/balance", {
-            userId: guildMember.id,
-            name: getUsername(guildMember),
-            amount: addedCoins,
-            required: stake
-        });
+		// Settle wager through NexAPI
+		const result = await postAPI("/currency/update/balance", {
+			userId: guildMember.id,
+			name: getUsername(guildMember),
+			amount: addedCoins,
+			required: stake
+		});
 
-        if (result.error) {
-            if (result.status == 402) {
-                await replyContainer(
-                    interaction,
-                    "Snake eyes",
-                    [`You have insufficient ${prefix(0)} to perform this action.`],
-                    "warn",
-                    warning,
-                    {
-                        advert: false
-                    }
-                );
-                return;
-            }
+		if (result.error) {
+			if (result.status == 402) {
+				await replyContainer(
+					interaction,
+					"Snake eyes",
+					[`You have insufficient ${prefix(0)} to perform this action.`],
+					"warn",
+					warning,
+					{
+						advert: false
+					}
+				);
+				return;
+			}
 
-            await replyContainer(
-                interaction,
-                "API Error",
-                ["Could not play snake eyes."],
-                "warn",
-                warning,
-                {
-                    advert: false
-                }
-            );
-            return;
-        }
+			await replyContainer(
+				interaction,
+				"API Error",
+				["Could not play snake eyes."],
+				"warn",
+				warning,
+				{
+					advert: false
+				}
+			);
+			return;
+		}
 
-        let balanceUser = result.content;
+		let balanceUser = result.content;
 
 		// artificial delay to make it look interesting
 		await loadAnim(
@@ -169,9 +169,9 @@ module.exports = {
 		)
 
 		await delay(3000);
-        addedCoins = abbrevBalance(addedCoins);
-        let newCoinAmt = abbrevBalance(balanceUser.value);
-        let level = await expGain(guildMember);
+		addedCoins = abbrevBalance(addedCoins);
+		let newCoinAmt = abbrevBalance(balanceUser.value);
+		let level = await expGain(guildMember);
 
 		// build message
 		const containerBuild = async function (shortened) {

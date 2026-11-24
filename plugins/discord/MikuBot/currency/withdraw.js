@@ -18,8 +18,8 @@ module.exports = {
 		.setDescription('Withdraw a specific amount from the bank.')
 		.addIntegerOption(option =>
 			option
-				.setName('coins')
-				.setDescription('The coin amount to transfer.'))
+				.setName(`${prefix(0, false, false)}`)
+				.setDescription(`The ${prefix(1)} amount to transfer.`))
 		.addIntegerOption(option =>
 			option
 				.setName('zeros')
@@ -27,7 +27,7 @@ module.exports = {
 		.addStringOption(option =>
 			option
 				.setName('all')
-				.setDescription('Withdraw all coins?')
+				.setDescription(`Withdraw all of your ${prefix(0)}?`)
 				.addChoices(
 					{ name: 'True', value: 'true' },
 				)),
@@ -57,9 +57,9 @@ module.exports = {
 
 		let transfer;
 		if (interaction.options.getInteger("zeros") === null) {
-			transfer = interaction.options.getInteger("coins");
+			transfer = interaction.options.getInteger(prefix(0, false, false));
 		} else {
-			transfer = interaction.options.getInteger("coins") * Math.pow(10, interaction.options.getInteger("zeros"));
+			transfer = interaction.options.getInteger(prefix(0, false, false)) * Math.pow(10, interaction.options.getInteger("zeros"));
 		}
 		if (interaction.options.getString("all") === "true") {
 			const bankResult = await queryAPI("/currency/update/bank", {

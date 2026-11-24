@@ -94,14 +94,14 @@ module.exports = {
 			// Prepare message
 			let msg;
 			if (shortened) {
-				msg = `You decided to work at your job and got ${addedCoins.displayValue} coins.\nYour updated balance: ${newCoinAmt.displayValue} coins.`;
+				msg = `You decided to work at your job and got ${addedCoins.displayValue} ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.value)}.`;
 				if (raise.value > 0) {
-					msg += `\n-# You got a raise from working so hard! Your salary has increased by ${raise.displayValue} coins.`
+					msg += `\n-# You got a raise from working so hard! Your salary has increased by ${raise.displayValue} ${prefix(raise.value)}.`
 				}
 			} else {
-				msg = `You decided to work at your job and got ${addedCoins.value} coins.\nYour updated balance: ${newCoinAmt.value} coins.`;
+				msg = `You decided to work at your job and got ${addedCoins.value} ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.value} ${prefix(newCoinAmt.value)}.`;
 				if (raise.value > 0) {
-					msg += `\n-# You got a raise from working so hard! Your salary has increased by ${raise.value} coins.`
+					msg += `\n-# You got a raise from working so hard! Your salary has increased by ${raise.value} ${prefix(raise.value)}.`
 				}
 			}
 			if (level > 0) {

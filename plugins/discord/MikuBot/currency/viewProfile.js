@@ -137,9 +137,9 @@ module.exports = {
 			// net worth code
 			const net = itemNetWorth ?? 0;
 			if (shortened) {
-				msgBalance += `\nNet Worth: ${(abbrevBalance(net + bankBalanceUser.value + balanceUser2.value)).displayValue} (${(abbrevBalance(net)).displayValue} from items)`
+				msgBalance += `\nNet Worth: ${(abbrevBalance(net + bankBalanceUser.value + balanceUser2.value)).displayValue} ${prefix(net + bankBalanceUser.value + balanceUser2.value)} (${(abbrevBalance(net)).displayValue} from items)`
 			} else {
-				msgBalance += `\nNet Worth: ${(abbrevBalance(net + bankBalanceUser.value + balanceUser2.value)).value} (${(abbrevBalance(net)).value} from items)`
+				msgBalance += `\nNet Worth: ${(abbrevBalance(net + bankBalanceUser.value + balanceUser2.value)).value} ${prefix(net + bankBalanceUser.value + balanceUser2.value)} (${(abbrevBalance(net)).value} from items)`
 			}
 
 			// Job

@@ -124,7 +124,7 @@ const useItem = async function (itemList, interaction, qty, guildMember, respons
                 itemList = result.content.inventory;
                 const bankUser = result.content.vault;
 
-                msg = `Bank balance increased by ${(abbrevBalance(result.content.increase)).displayValue} coin${pluralValues(result.content.increase)}.\nNew Bank balance: ${(abbrevBalance(bankUser.value)).displayValue} / ${(abbrevBalance(bankUser.maxValue)).displayValue}\nYou now have ${itemList.value} banknote${pluralValues(itemList.value)}`;
+                msg = `Bank balance increased by ${(abbrevBalance(result.content.increase)).displayValue} ${prefix(result.content.increase)}.\nNew Bank balance: ${(abbrevBalance(bankUser.value)).displayValue} / ${(abbrevBalance(bankUser.maxValue)).displayValue}\nYou now have ${itemList.value} banknote${pluralValues(itemList.value)}`;
                 break;
             }
 

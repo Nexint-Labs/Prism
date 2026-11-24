@@ -345,23 +345,23 @@ module.exports = {
 				if (shortened) {
 					msg = `You have lost ${(abbrevBalance(transfer)).displayValue} ${prefix(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.displayValue)}`;
 				} else {
-					msg = `You have lost ${transfer} ${prefix(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew bank balance: ${newCoinAmt.value}`;
+					msg = `You have lost ${transfer} ${prefix(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew bank balance: ${newCoinAmt.value} ${prefix(newCoinAmt.value)}`;
 				}
 			} else if (lost === false) {
 
 				// win text
 				if (shortened) {
-					msg = `You have won ${(abbrevBalance(transfer)).displayValue} ${prefix(transfer)}}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.displayValue)}`;
+					msg = `You have won ${(abbrevBalance(transfer)).displayValue} ${prefix(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.displayValue)}`;
 				} else {
-					msg = `You have won ${transfer} ${prefix(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew bank balance: ${newCoinAmt.value}`;
+					msg = `You have won ${transfer} ${prefix(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew bank balance: ${newCoinAmt.value} ${prefix(newCoinAmt.value)}`;
 				}
 			} else if (lost === "tie") {
 
 				// tied text
 				if (shortened) {
-					msg = `You have tied against the bot, and have not gained or lost anything.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.displayValue)}`;
+					msg = `You have tied against the bot, and have not gained or lost anything.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.value)}`;
 				} else {
-					msg = `You have tied against the bot, and have not gained or lost anything.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.value} ${prefix(newCoinAmt.displayValue)}`;
+					msg = `You have tied against the bot, and have not gained or lost anything.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.value} ${prefix(newCoinAmt.value)}`;
 				}
 			} else {
 				if (shortened) {

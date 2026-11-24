@@ -67,9 +67,9 @@ module.exports = {
 		let addedCoins;
 
 		if (interaction.options.getInteger("zeros") === null) {
-			addedCoins = interaction.options.getInteger("coins");
+			addedCoins = interaction.options.getInteger(prefix(0, false, false));
 		} else {
-			addedCoins = interaction.options.getInteger("coins") * Math.pow(10, interaction.options.getInteger("zeros"));
+			addedCoins = interaction.options.getInteger(prefix(0, false, false)) * Math.pow(10, interaction.options.getInteger("zeros"));
 		}
 
 		if (interaction.options.getString("all") === "true") {
@@ -82,7 +82,7 @@ module.exports = {
 				await replyContainer(
 					interaction,
 					"API Error",
-					["Could not retrieve your balance."],
+					[`Could not retrieve your ${prefix(0)}.`],
 					"warn",
 					warning,
 					{
