@@ -180,7 +180,7 @@ module.exports = {
 
         const promptContainer = await createContainer(
             "Give",
-            [`Are you sure you want to send ${guildMember.username} ${(abbrevBalance(qty)).displayValue} ${item.name}${pluralValues(qty)}?\nYou have ${(await abbrevBalance(itemList.value)).displayValue} ${item.name}${pluralValues(itemList.value)}.`,],
+            [`Are you sure you want to send ${guildMember.username} ${(abbrevBalance(qty)).displayValue} ${item.name}${pluralValues(qty)}?\nYou have ${(abbrevBalance(itemList.value)).displayValue} ${item.name}${pluralValues(itemList.value)}.`,],
             "default",
             null,
             {
@@ -276,7 +276,7 @@ module.exports = {
         let itemReceive = result.content.transferResult;
 
         // Build message
-        let msg = `Gave ${guildMember.username} ${(abbrevBalance(qty)).displayValue} ${item.name}${pluralValues(qty)}.\nYour new balance: ${(abbrevBalance(itemList.value)).displayValue} ${item.name}${pluralValues(itemList.value)}.\nTheir new balance: ${(await abbrevBalance(itemReceive.value)).displayValue} ${item.name}${pluralValues(itemReceive.value)}.`;
+        let msg = `Gave ${guildMember.username} ${(abbrevBalance(qty)).displayValue} ${item.name}${pluralValues(qty)}.\nYour new balance: ${(abbrevBalance(itemList.value)).displayValue} ${item.name}${pluralValues(itemList.value)}.\nTheir new balance: ${(abbrevBalance(itemReceive.value)).displayValue} ${item.name}${pluralValues(itemReceive.value)}.`;
 
         // Analytics
         await addCommandsUsed(interaction.user);

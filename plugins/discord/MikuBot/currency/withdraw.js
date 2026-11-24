@@ -9,7 +9,7 @@ const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
 const { createContainer } = require('#functions/discord/container/container');
 const { postAPI, queryAPI } = require('#functions/discord/api/fetch');
 const { getUsername } = require('#functions/discord/core/getUsername');
-const { pluralValues } = require('#functions/discord/core/pluralValues');
+const { pluralValues, prefix } = require('#functions/discord/core/pluralValues');
 
 module.exports = {
 	cooldown: 5,
@@ -141,9 +141,9 @@ module.exports = {
 			// Prepare message
 			let msg = "";
 			if (shortened) {
-				msg = `Withdrew ${transfer.displayValue} coin${pluralValues(transfer.value)} from the bank.\nNew balance: ${(abbrevBalance(userBalance.value)).displayValue} coin${pluralValues(userBalance.value)}.\nNew bank balance: ${(abbrevBalance(bankBalance.value)).displayValue} coin${pluralValues(bankBalance.value)}.`;
+				msg = `Withdrew ${transfer.displayValue} ${prefix(transfer.value)} from the bank.\nNew balance: ${(abbrevBalance(userBalance.value)).displayValue} ${prefix(userBalance.value)}.\nNew bank balance: ${(abbrevBalance(bankBalance.value)).displayValue} ${prefix(bankBalance.value)}.`;
 			} else {
-				msg = `Withdrew ${transfer.value} coin${pluralValues(transfer.value)} from the bank.\nNew balance: ${(abbrevBalance(userBalance.value)).value} coin${pluralValues(userBalance.value)}.\nNew bank balance: ${(abbrevBalance(bankBalance.value)).value} coin${pluralValues(bankBalance.value)}.`;
+				msg = `Withdrew ${transfer.value} ${prefix(transfer.value)} from the bank.\nNew balance: ${(abbrevBalance(userBalance.value)).value} ${prefix(userBalance.value)}.\nNew bank balance: ${(abbrevBalance(bankBalance.value)).value} ${prefix(bankBalance.value)}.`;
 			}
 
 			// return embed

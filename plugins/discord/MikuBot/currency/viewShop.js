@@ -8,7 +8,7 @@ const { createAdvancedContainer, createContainer } = require('#functions/discord
 const { handleInteractionError } = require('#functions/discord/helpers/handleInteractionError');
 const { addCommandsUsed } = require('#functions/discord/analytics/usageData');
 const { abbrevBalance } = require('#functions/discord/helpers/abbrevValues');
-const { pluralValues } = require('#functions/discord/core/pluralValues');
+const { pluralValues, prefix } = require('#functions/discord/core/pluralValues');
 const { postAPI, getAPI, queryAPI } = require('#functions/discord/api/fetch');
 const { getUsername } = require('#functions/discord/core/getUsername');
 
@@ -178,9 +178,9 @@ module.exports = {
                     // desc
                     msg += `Description: ${itemList[i + (page - 1) * itemListLength].desc}`
                     if (shortened) {
-                        msg += `\nPrice: ${(await abbrevBalance(itemList[i + (page - 1) * itemListLength].value * qty)).displayValue} (${(await abbrevBalance(itemList[i + (page - 1) * itemListLength].value)).displayValue} x ${(await abbrevBalance(qty)).displayValue})`;
+                        msg += `\nPrice: ${(abbrevBalance(itemList[i + (page - 1) * itemListLength].value * qty)).displayValue} ${prefix(itemList[i + (page - 1) * itemListLength].value * qty)} (${(abbrevBalance(itemList[i + (page - 1) * itemListLength].value)).displayValue} x ${(abbrevBalance(qty)).displayValue})`;
                     } else {
-                        msg += `\nPrice: ${(await abbrevBalance(itemList[i + (page - 1) * itemListLength].value * qty)).value} (${(await abbrevBalance(itemList[i + (page - 1) * itemListLength].value)).value} x ${(await abbrevBalance(qty)).value})`;
+                        msg += `\nPrice: ${(abbrevBalance(itemList[i + (page - 1) * itemListLength].value * qty)).value} ${prefix(itemList[i + (page - 1) * itemListLength].value * qty)} (${(abbrevBalance(itemList[i + (page - 1) * itemListLength].value)).value} x ${(abbrevBalance(qty)).value})`;
                     }
                     msg += `\n-# ID: ${itemList[i + (page - 1) * itemListLength].id}`;
                     titleDescArray.push(msg);
@@ -370,9 +370,9 @@ module.exports = {
 
                         // Confirmation prompt.
                         if (shortened) {
-                            msg = `Are you sure you want to purchase ${(await abbrevBalance(qty)).displayValue} ${itemList[selectedItem].name}${pluralValues(qty)}?\n-# This purchase is worth ${(await abbrevBalance(itemList[selectedItem].value * qty)).displayValue} coin${pluralValues(itemList[selectedItem].value * qty)}.`;
+                            msg = `Are you sure you want to purchase ${(abbrevBalance(qty)).displayValue} ${itemList[selectedItem].name}${pluralValues(qty)}?\n-# This purchase is worth ${(abbrevBalance(itemList[selectedItem].value * qty)).displayValue} ${prefix(itemList[selectedItem].value * qty)}.`;
                         } else {
-                            msg = `Are you sure you want to purchase ${(await abbrevBalance(qty)).value} ${itemList[selectedItem].name}${pluralValues(qty)}?\n-# This purchase is worth ${(await abbrevBalance(itemList[selectedItem].value * qty)).value} coin${pluralValues(itemList[selectedItem].value * qty)}.`;
+                            msg = `Are you sure you want to purchase ${(abbrevBalance(qty)).value} ${itemList[selectedItem].name}${pluralValues(qty)}?\n-# This purchase is worth ${(abbrevBalance(itemList[selectedItem].value * qty)).value} ${prefix(itemList[selectedItem].value * qty)}.`;
                         }
                         userContainer = await createContainer(
                             "Shop",
@@ -435,9 +435,9 @@ module.exports = {
 
                     // Send message
                     if (shortened) {
-                        msg = `You have now bought ${(await abbrevBalance(qty)).displayValue} ${itemList[selectedItem].name}${pluralValues(qty)} (ID: ${bought.itemUser.name})!\n\nYou now have ${(await abbrevBalance(bought.itemUser.value)).displayValue} ${itemList[selectedItem].name}${pluralValues(bought.itemUser.value)}.\nYour updated balance is now ${(await abbrevBalance(bought.user.value)).displayValue} coin${pluralValues(bought.user.value)}.`;
+                        msg = `You have now bought ${(abbrevBalance(qty)).displayValue} ${itemList[selectedItem].name}${pluralValues(qty)} (ID: ${bought.itemUser.name})!\n\nYou now have ${(abbrevBalance(bought.itemUser.value)).displayValue} ${itemList[selectedItem].name}${pluralValues(bought.itemUser.value)}.\nYour updated balance is now ${(abbrevBalance(bought.user.value)).displayValue} ${prefix(bought.user.value)}.`;
                     } else {
-                        msg = `You have now bought ${(await abbrevBalance(qty)).value} ${itemList[selectedItem].name}${pluralValues(qty)} (ID: ${bought.itemUser.name})!\n\nYou now have ${(await abbrevBalance(bought.itemUser.value)).value} ${itemList[selectedItem].name}${pluralValues(bought.itemUser.value)}.\nYour updated balance is now ${(await abbrevBalance(bought.user.value)).value} coin${pluralValues(bought.user.value)}.`;
+                        msg = `You have now bought ${(abbrevBalance(qty)).value} ${itemList[selectedItem].name}${pluralValues(qty)} (ID: ${bought.itemUser.name})!\n\nYou now have ${(abbrevBalance(bought.itemUser.value)).value} ${itemList[selectedItem].name}${pluralValues(bought.itemUser.value)}.\nYour updated balance is now ${(abbrevBalance(bought.user.value)).value} ${prefix(bought.user.value)}.`;
                     }
                     userContainer = await createContainer(
                         "Shop",

@@ -10,12 +10,14 @@ const { dmNotify } = require('#functions/discord/notify/dmNotify');
 const { addCommandsUsed } = require('#functions/discord/analytics/usageData');
 const delay = require('#functions/core/delay');
 const { postAPI } = require('#functions/discord/api/fetch');
+const { prefix } = require('#functions/discord/core/pluralValues');
+const { log } = require('#functions/core/log.mjs');
 
 module.exports = {
 	cooldown: 30,
 	data: new SlashCommandBuilder()
 		.setName('rob')
-		.setDescription('Steal someone\'s coins. Costs 1000 coins to attempt to steal.')
+		.setDescription(`Steal someone\'s ${prefix(0)}. Costs 1000 ${prefix(0)} to attempt to steal.`)
 		.addUserOption(option =>
 			option
 				.setName('user')
@@ -127,7 +129,7 @@ module.exports = {
 				await replyContainer(
 					interaction,
 					"Rob",
-					["The victim has 0 coins.", "Why are you beating a dead bush anyways?"],
+					[`The victim has 0 ${prefix(0)}.`, "Why are you beating a dead bush anyways?"],
 					"warn",
 					warning,
 					{
@@ -185,9 +187,9 @@ module.exports = {
 		if (robResult.outcome === 'FAILED') {
 			msg = `You tried stealing from ${guildMember.displayName}, but failed. They will be notified of your attempt.`;
 		} else if (robResult.outcome === 'SUCCESS') {
-			msg = `You stole from ${guildMember.displayName} and made ${(abbrevBalance(addedCoins)).displayValue} coins.\nYour new balance: ${(abbrevBalance(robberBalance)).displayValue} coins.`;
+			msg = `You stole from ${guildMember.displayName} and made ${(abbrevBalance(addedCoins)).displayValue} ${prefix(addedCoins)}.\nYour new balance: ${(abbrevBalance(robberBalance)).displayValue} ${prefix(robberBalance)}.`;
 		} else if (robResult.outcome === 'JACKPOT') {
-			msg = `You stole ALL OF ${guildMember.displayName}'S COINS LOL and made ${(abbrevBalance(addedCoins)).displayValue} coins.\nYour new balance: ${(abbrevBalance(robberBalance)).displayValue} coins.`;
+			msg = `You stole ALL OF ${guildMember.displayName}'S ${prefix(addedCoins)} LOL and made ${(abbrevBalance(addedCoins)).displayValue} ${prefix(addedCoins)}.\nYour new balance: ${(abbrevBalance(robberBalance)).displayValue} ${prefix(robberBalance)}.`;
 		} else {
 			throw new Error(`Unexpected robbery outcome: ${robResult.outcome}`);
 		}
@@ -203,7 +205,7 @@ module.exports = {
 		try {
 			await addCommandsUsed(interaction.user);
 		} catch (error) {
-			console.error('[Rob] Analytics failed:', error);
+			log.error('Analytics failed:', error);
 		}
 
 		// send message
@@ -214,14 +216,14 @@ module.exports = {
 			[msg],
 			"default"
 		)
-		let coins = await abbrevBalance(addedCoins);
+		let coins = abbrevBalance(addedCoins);
 		try {
 			const messageUrl = response.resource.message.url;
 			let result;
 			if (robResult.outcome === 'FAILED') {
-				result = await dmNotify(guildMember, [`${interaction.user.displayName} tried robbing you in the channel ${messageUrl}, but failed.\nYour new balance: ${(abbrevBalance(victimBalance)).displayValue} coins.`], null, null);
+				result = await dmNotify(guildMember, [`${interaction.user.displayName} tried robbing you in the channel ${messageUrl}, but failed.\nYour new balance: ${(abbrevBalance(victimBalance)).displayValue} ${prefix(victimBalance)}.`], null, null);
 			} else {
-				result = await dmNotify(guildMember, [`${interaction.user.displayName} has robbed you of ${coins.displayValue} coins in the channel ${messageUrl}.\nYour new balance: ${(abbrevBalance(victimBalance)).displayValue} coins.`], null, null);
+				result = await dmNotify(guildMember, [`${interaction.user.displayName} has robbed you of ${coins.displayValue} ${prefix(coins.displayValue)} in the channel ${messageUrl}.\nYour new balance: ${(abbrevBalance(victimBalance)).displayValue} ${prefix(victimBalance)}.`], null, null);
 			}
 			if (result !== 0 && result?.rawError?.message != "Cannot send messages to this user") console.log(result);
 		} catch (error) {

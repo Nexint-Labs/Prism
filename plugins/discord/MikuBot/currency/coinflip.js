@@ -30,16 +30,16 @@ module.exports = {
 				))
 		.addIntegerOption(option =>
 			option
-				.setName('coins')
-				.setDescription('The coin amount.'))
+				.setName(`${prefix(0, false, false)}`)
+				.setDescription(`The ${prefix(1)} amount.`))
 		.addIntegerOption(option =>
 			option
 				.setName('zeros')
-				.setDescription('The amount of zeroes behind.'))
+				.setDescription('The amount of zeroes behind. (Sci-Notation)'))
 		.addStringOption(option =>
 			option
 				.setName('all')
-				.setDescription('Coinflip all coins?')
+				.setDescription(`Coinflip all of your ${prefix(0)}?`)
 				.addChoices(
 					{ name: 'True', value: 'true' },
 				)),
@@ -74,9 +74,9 @@ module.exports = {
 		// find the balance
 		let addedCoins;
 		if (interaction.options.getInteger("zeros") === null) {
-			addedCoins = interaction.options.getInteger("coins");
+			addedCoins = interaction.options.getInteger(prefix(0, false, false));
 		} else {
-			addedCoins = interaction.options.getInteger("coins") * Math.pow(10, interaction.options.getInteger("zeros"));
+			addedCoins = interaction.options.getInteger(prefix(0, false, false)) * Math.pow(10, interaction.options.getInteger("zeros"));
 		}
 		if (interaction.options.getString("all") === "true") {
 			const result = await queryAPI("/currency/update/balance", {
@@ -88,7 +88,7 @@ module.exports = {
 				await replyContainer(
 					interaction,
 					"API Error",
-					["Could not wager money."],
+					[`Could not wager ${prefix(1)}.`],
 					"warn",
 					warning,
 					{
@@ -143,7 +143,7 @@ module.exports = {
 				await replyContainer(
 					interaction,
 					"Coinflip",
-					["You have insufficient funds to perform this action."],
+					[`You have insufficient ${prefix(1)} to perform this action.`],
 					"warn",
 					warning,
 					{

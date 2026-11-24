@@ -11,6 +11,7 @@ const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
 const { createContainer, createAdvancedContainer } = require('#functions/discord/container/container');
 const { handleInteractionError } = require('#functions/discord/helpers/handleInteractionError');
 const { abbrevBalance } = require('#functions/discord/helpers/abbrevValues');
+const { prefix } = require('#functions/discord/core/pluralValues');
 
 module.exports = {
     cooldown: 5,
@@ -178,16 +179,16 @@ module.exports = {
                         titleDescArray.push(`Item ${i + 1 + (page - 1) * itemListLength}: ${item.name}`);
                         msg += `Description: ${item.desc}`;
                         if (shortened) {
-                            msg += `\nQuantity: ${(await abbrevBalance(itemList[i + (page - 1) * itemListLength].value)).displayValue}`;
+                            msg += `\nQuantity: ${(abbrevBalance(itemList[i + (page - 1) * itemListLength].value)).displayValue}`;
                             if (item.value > 0) {
-                                msg += `\nValue: ${(await abbrevBalance((item.value) * (itemList[i + (page - 1) * itemListLength].value))).displayValue} (${(await abbrevBalance(item.value)).displayValue} x ${(await abbrevBalance(itemList[i + (page - 1) * itemListLength].value)).displayValue})`;
+                                msg += `\nValue: ${(abbrevBalance((item.value) * (itemList[i + (page - 1) * itemListLength].value))).displayValue} ${prefix((item.value) * (itemList[i + (page - 1) * itemListLength].value))} (${(abbrevBalance(item.value)).displayValue} x ${(abbrevBalance(itemList[i + (page - 1) * itemListLength].value)).displayValue}) `;
                             } else {
                                 msg += `\nThis item has no set value!`
                             }
                         } else {
-                            msg += `\nQuantity: ${(await abbrevBalance(itemList[i + (page - 1) * itemListLength].value)).value}`;
+                            msg += `\nQuantity: ${(abbrevBalance(itemList[i + (page - 1) * itemListLength].value)).value}`;
                             if (item.value > 0) {
-                                msg += `\nValue: ${(await abbrevBalance((item.value) * (itemList[i + (page - 1) * itemListLength].value))).value} (${(await abbrevBalance(item.value)).value} x ${(await abbrevBalance(itemList[i + (page - 1) * itemListLength].value)).value})`;
+                                msg += `\nValue: ${(abbrevBalance((item.value) * (itemList[i + (page - 1) * itemListLength].value))).value} ${prefix((item.value) * (itemList[i + (page - 1) * itemListLength].value))} (${(abbrevBalance(item.value)).value} x ${(abbrevBalance(itemList[i + (page - 1) * itemListLength].value)).value})`;
                             } else {
                                 msg += `\nThis item has no set value!`
                             }

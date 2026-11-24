@@ -13,6 +13,7 @@ const { createContainer } = require('#functions/discord/container/container');
 const { warning } = require('#config/discord/visual/botAssets');
 const { loadAnim } = require('#functions/discord/helpers/load');
 const delay = require('#functions/core/delay');
+const { prefix } = require('#functions/discord/core/pluralValues');
 
 module.exports = {
 	cooldown: 5,
@@ -21,8 +22,8 @@ module.exports = {
 		.setDescription('Snake eyes minigame - with TERRIBLE odds.')
 		.addIntegerOption(option =>
 			option
-				.setName('coins')
-				.setDescription('The coin amount.'))
+				.setName(`${prefix(0, false, false)}`)
+				.setDescription(`The ${prefix(1)} amount to gamble.`))
 		.addIntegerOption(option =>
 			option
 				.setName('zeros')
@@ -30,7 +31,7 @@ module.exports = {
 		.addStringOption(option =>
 			option
 				.setName('all')
-				.setDescription('Bet all coins?')
+				.setDescription(`Gamble all ${prefix(0)}?`)
 				.addChoices(
 					{ name: 'True', value: 'true' },
 				)),
@@ -100,7 +101,7 @@ module.exports = {
 			await replyContainer(
 				interaction,
 				"Snake eyes",
-				["You cannot gamble a non-positive amount of coins."],
+				[`You cannot gamble a non-positive amount of ${prefix(0)}.`],
 				"warn",
 				warning,
 				{
@@ -135,7 +136,7 @@ module.exports = {
                 await replyContainer(
                     interaction,
                     "Snake eyes",
-                    ["You have insufficient funds to perform this action."],
+                    [`You have insufficient ${prefix(0)} to perform this action.`],
                     "warn",
                     warning,
                     {
@@ -178,14 +179,14 @@ module.exports = {
 			// Prepare message
 			let msg = "";
 			if (shortened) {
-				msg = `You rolled [${rng}] [${rng2}], and made back ${addedCoins.displayValue} coins.\nYour updated balance: ${newCoinAmt.displayValue} coins.`
+				msg = `You rolled [${rng}] [${rng2}], and made back ${addedCoins.displayValue} ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.value)}.`
 				if (addedCoins.value < 0) {
-					msg = `You rolled [${rng}] [${rng2}], and lost ${(abbrevBalance(addedCoins.value * -1)).displayValue} coins.\nYour updated balance: ${newCoinAmt.displayValue} coins.`
+					msg = `You rolled [${rng}] [${rng2}], and lost ${(abbrevBalance(addedCoins.value * -1)).displayValue} ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.value)}.`
 				}
 			} else {
-				msg = `You rolled [${rng}] [${rng2}], and made back ${addedCoins.value} coins.\nYour updated balance: ${newCoinAmt.value} coins.`
+				msg = `You rolled [${rng}] [${rng2}], and made back ${addedCoins.value} ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.value} ${prefix(newCoinAmt.value)}.`
 				if (addedCoins.value < 0) {
-					msg = `You rolled [${rng}] [${rng2}], and lost ${Math.abs(addedCoins.value)} coins.\nYour updated balance: ${newCoinAmt.value} coins.`
+					msg = `You rolled [${rng}] [${rng2}], and lost ${Math.abs(addedCoins.value)} ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.value} ${prefix(newCoinAmt.value)}.`
 				}
 			}
 			if (level > 0) {

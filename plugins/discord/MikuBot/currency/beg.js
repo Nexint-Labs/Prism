@@ -53,7 +53,7 @@ module.exports = {
 			await replyContainer(
 				interaction,
 				"API Error",
-				["Could not beg for money."],
+				[`Could not beg for ${prefix(1, true, false)}.`],
 				"warn",
 				warning,
 				{

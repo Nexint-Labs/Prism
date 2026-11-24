@@ -7,7 +7,7 @@ const { optOutChkSingle } = require('#functions/discord/opt-out/optOut');
 const { replyContainer } = require('#functions/discord/container/replyContainer');
 const { warning } = require('#config/discord/visual/botAssets');
 const { createContainer } = require('#functions/discord/container/container');
-const { pluralValues } = require('#functions/discord/core/pluralValues');
+const { pluralValues, prefix } = require('#functions/discord/core/pluralValues');
 const { getUsername } = require('#functions/discord/core/getUsername');
 const { postAPI, queryAPI } = require('#functions/discord/api/fetch');
 
@@ -15,11 +15,11 @@ module.exports = {
 	cooldown: 5,
 	data: new SlashCommandBuilder()
 		.setName('deposit')
-		.setDescription('Deposit a specific amount into the bank.')
+		.setDescription(`Deposit ${prefix(1)} into the bank.`)
 		.addIntegerOption(option =>
 			option
-				.setName('coins')
-				.setDescription('The coin amount to transfer.'))
+				.setName(`${prefix(0, false, false)}`)
+				.setDescription(`The ${prefix(1)} amount to transfer.`))
 		.addIntegerOption(option =>
 			option
 				.setName('zeros')
@@ -27,7 +27,7 @@ module.exports = {
 		.addStringOption(option =>
 			option
 				.setName('all')
-				.setDescription('Deposit all coins?')
+				.setDescription(`Deposit all of your ${prefix(0)}?`)
 				.addChoices(
 					{ name: 'True', value: 'true' },
 				)),
@@ -59,9 +59,9 @@ module.exports = {
 		// get the balance and bank values
 		let transfer;
 		if (interaction.options.getInteger("zeros") === null) {
-			transfer = interaction.options.getInteger("coins");
+			transfer = interaction.options.getInteger(prefix(0, false, false));
 		} else {
-			transfer = interaction.options.getInteger("coins") * Math.pow(10, interaction.options.getInteger("zeros"));
+			transfer = interaction.options.getInteger(prefix(0, false, false)) * Math.pow(10, interaction.options.getInteger("zeros"));
 		}
 		if (interaction.options.getString("all") === "true") {
 			const bankResult = await queryAPI("/currency/update/bank", {
@@ -94,7 +94,7 @@ module.exports = {
 			await replyContainer(
 				interaction,
 				"Deposit",
-				["You must deposit a positive amount of coins."],
+				[`You must deposit a positive amount of ${prefix(1)}.`],
 				"warn",
 				warning,
 				{ advert: false }
@@ -115,7 +115,7 @@ module.exports = {
 				await replyContainer(
 					interaction,
 					"Deposit",
-					["You have insufficient funds to perform this action."],
+					[`You have insufficient ${prefix(1)} to perform this action.`],
 					"warn",
 					warning,
 					{
@@ -140,7 +140,7 @@ module.exports = {
 			await replyContainer(
 				interaction,
 				"API Error",
-				["Could not deposit money."],
+				[`Could not deposit your ${prefix(1)}.`],
 				"warn",
 				warning,
 				{
@@ -161,9 +161,9 @@ module.exports = {
 			// Prepare message
 			let msg = "";
 			if (shortened) {
-				msg = `Deposited ${transfer.displayValue} coin${pluralValues(transfer.value)} into the bank.\nNew balance: ${(abbrevBalance(userBalance.value)).displayValue} coin${pluralValues(userBalance.value)}.\nNew bank balance: ${(abbrevBalance(bankBalance.value)).displayValue} coin${pluralValues(bankBalance.value)}.`;
+				msg = `Deposited ${transfer.displayValue} ${prefix(transfer.value)} into the bank.\nNew balance: ${(abbrevBalance(userBalance.value)).displayValue} ${prefix(userBalance.value)}.\nNew bank balance: ${(abbrevBalance(bankBalance.value)).displayValue} ${prefix(bankBalance.value)}.`;
 			} else {
-				msg = `Deposited ${transfer.value} coin${pluralValues(transfer.value)} into the bank.\nNew balance: ${(abbrevBalance(userBalance.value)).value} coin${pluralValues(userBalance.value)}.\nNew bank balance: ${(abbrevBalance(bankBalance.value)).value} coin${pluralValues(bankBalance.value)}.`;
+				msg = `Deposited ${transfer.value} ${prefix(transfer.value)} into the bank.\nNew balance: ${(abbrevBalance(userBalance.value)).value} ${prefix(userBalance.value)}.\nNew bank balance: ${(abbrevBalance(bankBalance.value)).value} ${prefix(bankBalance.value)}.`;
 			}
 
 			// return embed

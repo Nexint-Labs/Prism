@@ -13,16 +13,17 @@ const { short } = require('#functions/discord/container/menus/short');
 const { addCommandsUsed } = require('#functions/discord/analytics/usageData');
 const { abbrevBalance } = require('#functions/discord/helpers/abbrevValues');
 const delay = require('#functions/core/delay');
+const { prefix } = require('#functions/discord/core/pluralValues');
 
 module.exports = {
 	cooldown: 5,
 	data: new SlashCommandBuilder()
 		.setName('slots')
-		.setDescription('Pull a slot machine with coins (with REALLY terrible odds).')
+		.setDescription(`Pull a slot machine and gamble ${prefix(0)} (with REALLY terrible odds).`)
 		.addIntegerOption(option =>
 			option
-				.setName('coins')
-				.setDescription('The coin amount to gamble.'))
+				.setName(`${prefix(0, false, false)}`)
+				.setDescription(`The ${prefix(1)} amount to gamble.`))
 		.addIntegerOption(option =>
 			option
 				.setName('zeros')
@@ -30,7 +31,7 @@ module.exports = {
 		.addStringOption(option =>
 			option
 				.setName('all')
-				.setDescription('Gamble all coins?')
+				.setDescription(`Gamble all ${prefix(0)}?`)
 				.addChoices(
 					{ name: 'True', value: 'true' },
 				)),

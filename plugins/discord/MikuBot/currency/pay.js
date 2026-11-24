@@ -6,7 +6,7 @@ const { replyContainer } = require('#functions/discord/container/replyContainer'
 const { optOutChkSingle } = require('#functions/discord/opt-out/optOut');
 const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
 const { warning } = require('#config/discord/visual/botAssets');
-const { pluralValues } = require('#functions/discord/core/pluralValues');
+const { prefix } = require('#functions/discord/core/pluralValues');
 const { confirm } = require('#functions/discord/container/menus/confirm');
 const { createContainer } = require('#functions/discord/container/container');
 const { queryAPI, postAPI } = require('#functions/discord/api/fetch');
@@ -16,7 +16,7 @@ module.exports = {
     cooldown: 5,
     data: new SlashCommandBuilder()
         .setName('pay')
-        .setDescription('Pay a specific user.')
+        .setDescription(`Pay a specific user ${prefix(0)}.`)
         .addUserOption(option =>
             option
                 .setName('user')
@@ -24,8 +24,8 @@ module.exports = {
                 .setDescription('The person\'s balance to send to.'))
         .addIntegerOption(option =>
             option
-                .setName('coins')
-                .setDescription('The coin amount to transfer.'))
+                .setName(`${prefix(0, false, false)}`)
+                .setDescription(`The ${prefix(0)} amount to transfer.`))
         .addIntegerOption(option =>
             option
                 .setName('zeros')
@@ -33,7 +33,7 @@ module.exports = {
         .addStringOption(option =>
             option
                 .setName('all')
-                .setDescription('Deposit all coins?')
+                .setDescription(`Deposit all ${prefix(1)}?`)
                 .addChoices(
                     { name: 'True', value: 'true' },
                 )),
@@ -83,7 +83,7 @@ module.exports = {
             await replyContainer(
                 interaction,
                 "Payment",
-                ["You can't send money to yourself."],
+                [`You can't send ${prefix(0)} to yourself.`],
                 "warn",
                 warning,
                 {
@@ -101,7 +101,7 @@ module.exports = {
             await replyContainer(
                 interaction,
                 "API Error",
-                ["Could not transfer money."],
+                [`Could not transfer ${prefix(0)}.`],
                 "warn",
                 warning,
                 {
@@ -112,9 +112,9 @@ module.exports = {
         }
         let transfer;
         if (interaction.options.getInteger("zeros") === null) {
-            transfer = interaction.options.getInteger("coins");
+            transfer = interaction.options.getInteger(prefix(0, false, false));
         } else {
-            transfer = interaction.options.getInteger("coins") * Math.pow(10, interaction.options.getInteger("zeros"));
+            transfer = interaction.options.getInteger(prefix(0, false, false)) * Math.pow(10, interaction.options.getInteger("zeros"));
         }
         if (interaction.options.getString("all") === "true") {
             transfer = oldBalResult.content.value
@@ -126,7 +126,7 @@ module.exports = {
             await replyContainer(
                 interaction,
                 "Payment",
-                ["You have insufficient funds to perform this action."],
+                [`You have insufficient ${prefix(0)} to perform this action.`],
                 "warn",
                 warning,
                 {
@@ -141,7 +141,7 @@ module.exports = {
             await replyContainer(
                 interaction,
                 "Payment",
-                [`Please give ${guildMember.displayName} a positive amount of money.`],
+                [`Please give ${guildMember.displayName} a positive amount of ${prefix(0)}.`],
                 "warn",
                 warning,
                 {
@@ -153,7 +153,7 @@ module.exports = {
 
         const promptContainer = await createContainer(
             "Payment",
-            [`Are you sure you want to send ${guildMember.username} ${(abbrevBalance(transfer)).displayValue} coin${pluralValues(transfer)}?\nYou have ${(abbrevBalance(oldBalResult.content.value)).displayValue} coin${pluralValues(oldBalResult.content.value)}.`,],
+            [`Are you sure you want to send ${guildMember.username} ${(abbrevBalance(transfer)).displayValue} ${prefix(transfer)}?\nYou have ${(abbrevBalance(oldBalResult.content.value)).displayValue} ${prefix(oldBalResult.content.value)}.`,],
             "default",
             null,
             {
@@ -236,7 +236,7 @@ module.exports = {
         transfer = abbrevBalance(transfer);
 
         // Build message
-        let msg = `Gave ${newBalanceUser.name} ${transfer.displayValue} coin${pluralValues(transfer.value)}.\nYour new balance: ${(abbrevBalance(oldBalanceUser.value)).displayValue} coin${pluralValues(oldBalanceUser.value)}.\nTheir new balance: ${(abbrevBalance(newBalanceUser.value)).displayValue} coin${pluralValues(newBalanceUser.value)}.`;
+        let msg = `Gave ${newBalanceUser.name} ${transfer.displayValue} ${prefix(transfer.value)}.\nYour new balance: ${(abbrevBalance(oldBalanceUser.value)).displayValue} ${prefix(oldBalanceUser.value)}.\nTheir new balance: ${(abbrevBalance(newBalanceUser.value)).displayValue} ${prefix(newBalanceUser.value)}.`;
 
         // Analytics
         await addCommandsUsed(interaction.user);
@@ -248,7 +248,7 @@ module.exports = {
             [msg],
             "default"
         )
-        let result2 = await dmNotify(guildMember, [`${interaction.user.displayName} has sent you ${transfer.displayValue} coin${pluralValues(transfer.value)} in the channel ${response.resource.message.url}!\nYour new balance: ${(abbrevBalance(newBalanceUser.value)).displayValue} coin${pluralValues(newBalanceUser.value)}.`],)
+        let result2 = await dmNotify(guildMember, [`${interaction.user.displayName} has sent you ${transfer.displayValue} ${prefix(transfer.value)} in the channel ${response.resource.message.url}!\nYour new balance: ${(abbrevBalance(newBalanceUser.value)).displayValue} ${prefix(newBalanceUser.value)}.`],)
         if (result2 !== 0 && result2.rawError.message != "Cannot send messages to this user") {
             throw result2;
         }

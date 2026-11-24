@@ -12,16 +12,17 @@ const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
 const { optOutChkSingle } = require('#functions/discord/opt-out/optOut');
 const { postAPI, queryAPI } = require('#functions/discord/api/fetch');
 const { getUsername } = require('#functions/discord/core/getUsername');
+const { pluginName } = require('#config/cosmetic/config');
 
 module.exports = {
 	cooldown: 5,
 	data: new SlashCommandBuilder()
 		.setName('blackjack')
-		.setDescription('Play blackjack. WIP.')
+		.setDescription(`Play blackjack against ${pluginName}.`)
 		.addIntegerOption(option =>
 			option
-				.setName(`${prefix(1, false, false)}`)
-				.setDescription(`The ${prefix(1, true, false)} amount to bet.`))
+				.setName(`${prefix(0, false, false)}`)
+				.setDescription(`The ${prefix(1)} amount to bet.`))
 		.addIntegerOption(option =>
 			option
 				.setName('zeros')
@@ -29,7 +30,7 @@ module.exports = {
 		.addStringOption(option =>
 			option
 				.setName('all')
-				.setDescription(`Bet all ${prefix(0, true, false)}?`)
+				.setDescription(`Bet all of your ${prefix(0)}?`)
 				.addChoices(
 					{ name: 'True', value: 'true' },
 				)),
@@ -64,9 +65,9 @@ module.exports = {
 		// balance check
 		let transfer;
 		if (interaction.options.getInteger("zeros") === null) {
-			transfer = interaction.options.getInteger(`${prefix(1, false, false)}`);
+			transfer = interaction.options.getInteger(prefix(0, false, false));
 		} else {
-			transfer = interaction.options.getInteger(`${prefix(1, false, false)}`) * Math.pow(10, interaction.options.getInteger("zeros"));
+			transfer = interaction.options.getInteger(prefix(0, false, false)) * Math.pow(10, interaction.options.getInteger("zeros"));
 		}
 		if (interaction.options.getString("all") === "true") {
 			const result = await queryAPI("/currency/update/balance", {
@@ -78,7 +79,7 @@ module.exports = {
 				await replyContainer(
 					interaction,
 					"API Error",
-					["Could not find your money."],
+					[`Could not find your ${prefix(1)}.`],
 					"warn",
 					warning,
 					{
@@ -97,7 +98,7 @@ module.exports = {
 			await replyContainer(
 				interaction,
 				"Blackjack",
-				["Please input a valid amount of money."],
+				[`Please input a valid amount of ${prefix(1)}.`],
 				"warn",
 				warning,
 				{
@@ -112,7 +113,7 @@ module.exports = {
 			await replyContainer(
 				interaction,
 				"Blackjack",
-				["Please input a positive amount of money."],
+				[`Please input a positive amount of ${prefix(1)}.`],
 				"warn",
 				warning,
 				{
@@ -134,7 +135,7 @@ module.exports = {
 				await replyContainer(
 					interaction,
 					"Blackjack",
-					["You have insufficient funds to perform this action."],
+					[`You have insufficient ${prefix(1)} to perform this action.`],
 					"warn",
 					warning,
 					{
@@ -146,7 +147,7 @@ module.exports = {
 			await replyContainer(
 				interaction,
 				"API Error",
-				["Could not wager money."],
+				[`Could not wager ${prefix(1)}.`],
 				"warn",
 				warning,
 				{

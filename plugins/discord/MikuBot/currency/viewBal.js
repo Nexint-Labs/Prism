@@ -11,12 +11,13 @@ const { createContainer } = require('#functions/discord/container/container');
 const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
 const { getUser } = require('#functions/discord/container/shardInfo');
 const { convNameToID } = require('#functions/discord/currency/userInfo');
+const { prefix } = require('#functions/discord/core/pluralValues');
 
 module.exports = {
 	cooldown: 5,
 	data: new SlashCommandBuilder()
 		.setName('bal')
-		.setDescription('Views balance of anyone. (Version 2)')
+		.setDescription(`Views ${prefix(1)} amounts of anyone. (Version 2)`)
 		.addUserOption(option =>
 			option
 				.setName('user')
@@ -95,7 +96,7 @@ module.exports = {
 				await replyContainer(
 					interaction,
 					"API Error",
-					["Could not retrieve balance."],
+					[`Could not retrieve ${prefix(1)}.`],
 					"warn",
 					warning,
 					{ advert: false }
@@ -125,9 +126,9 @@ module.exports = {
 				msg += `${displayName}'s balance: `;
 			}
 			if (shortened) {
-				msg += `${balanceUser.displayValue} coins.\n`
+				msg += `${balanceUser.displayValue} ${prefix(balanceUser.value)}.\n`
 			} else {
-				msg += `${balanceUser.value} coins.\n`
+				msg += `${balanceUser.value} ${prefix(balanceUser.value)}.\n`
 			}
 
 			// Bank Balance
@@ -137,9 +138,9 @@ module.exports = {
 				msg += `${displayName}'s bank balance: `;
 			}
 			if (shortened) {
-				msg += `${bankBalanceUser.displayValue} / ${bankMax.displayValue} coins.\n`
+				msg += `${bankBalanceUser.displayValue} / ${bankMax.displayValue} ${prefix(bankMax.value)}.\n`
 			} else {
-				msg += `${bankBalanceUser.value} / ${bankMax.value} coins.\n`
+				msg += `${bankBalanceUser.value} / ${bankMax.value} ${prefix(bankMax.value)}.\n`
 			}
 
 			// return embed
