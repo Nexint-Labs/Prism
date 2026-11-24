@@ -45,7 +45,7 @@ module.exports = {
 		try {
 			await targetUser.send({
 				components: [container],
-				flags: MessageFlags.IsComponentsDISCORD
+				flags: MessageFlags.IsComponentsV2
 			});
 		} catch (error) {
 			await moderateContainer(interaction.guild.id, "info", `I tried banning ${targetUser.username}, but I could not DM them!`);
