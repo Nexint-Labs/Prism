@@ -52,7 +52,7 @@ module.exports = {
         let optedOut = await optOutChk(interaction.user, interaction.targetMessage.author);
 
         // Add to analytics
-        addCommandsUsed(interaction.user);
+        await addCommandsUsed(interaction.user);
 
         // Search for gif
         const results = await searchGif("anime poke")

@@ -6,6 +6,7 @@ const { replyContainer } = require('#functions/discord/container/replyContainer'
 const { addCommandsUsed } = require('#functions/discord/analytics/usageData');
 const { dmNotify } = require('#functions/discord/notify/dmNotify');
 const { postAPI } = require('#functions/discord/api/fetch');
+const { log } = require('#functions/core/log.mjs');
 
 module.exports = {
 	cooldown: 86400,
@@ -69,13 +70,11 @@ module.exports = {
 			return;
 		}
 
-
 		// opt out?
 		let msg = 'You have opted out of being robbed.\n-# Note that you cannot rob others.';
 		if (robbable) {
 			msg = 'You have opted into being robbed.\n-# You can now be robbed.';
 		}
-
 
 		// analytics
 		addCommandsUsed(interaction.user);
@@ -90,7 +89,7 @@ module.exports = {
 		)
 		let dmResult = await dmNotify(guildMember, [msg]);
 		if (dmResult !== 0 && dmResult?.rawError?.message != "Cannot send messages to this user") {
-			console.log(dmResult);
+			log.error(dmResult);
 		}
 	},
 };

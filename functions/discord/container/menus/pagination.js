@@ -4,11 +4,12 @@ This file helps you view Discord notifications
 Version ID: 3.0
 */
 
-const {  ButtonBuilder, ButtonStyle, ActionRowBuilder, LabelBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, MessageFlags, Component } = require('discord.js');
+const { ButtonBuilder, ButtonStyle, ActionRowBuilder, LabelBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, MessageFlags, Component } = require('discord.js');
 const { buildOptionsMenu, buildOptionSelectMenu } = require("#functions/discord/helpers/addRow")
 const { handleInteractionError } = require("#functions/discord/helpers/handleInteractionError");
 const { followUpNotif } = require('#functions/discord/notify/checkNotifs');
-const { createContainer, createAdvancedContainer } = require('#functions/discord/container/container')
+const { createContainer, createAdvancedContainer } = require('#functions/discord/container/container');
+const { log } = require('#functions/core/log.mjs');
 
 /**
  * Build a modal lol
@@ -482,7 +483,9 @@ const pageMenu = async function (interaction, response, title, items, onSubmit, 
                         state,
                         onSubmit,
                         updateItems
-                    }).catch(console.error);
+                    }).catch(err => {
+                        log.error("An unexpected error has occurred in the pagination", err);
+                    });
 
                     continue;
                 } else {

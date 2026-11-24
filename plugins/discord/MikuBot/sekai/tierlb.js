@@ -28,7 +28,7 @@ module.exports = {
         ], true)
 
         // Add to analytics
-        addCommandsUsed(interaction.user);
+        await addCommandsUsed(interaction.user);
 
         // fetch
         const update = await fetch('https://seka.ing/api/leaderboard', {

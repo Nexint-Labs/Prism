@@ -62,7 +62,7 @@ module.exports = {
         let optedOut = await optOutChk(interaction.user, interaction.options.getUser("user"));
 
         // Add to analytics
-        addCommandsUsed(interaction.user);
+        await addCommandsUsed(interaction.user);
 
         // Level Gain (50/50)
         if (interaction.guild != null && Math.random() > 0.5) {

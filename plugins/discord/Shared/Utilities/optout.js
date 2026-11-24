@@ -98,7 +98,6 @@ module.exports = {
                 userId: interaction.user.id,
                 name: getUsername(interaction.user)
             })
-            console.log(optedOut)
             if (optedOut.error) {
                 await replyContainer(
                     interaction,

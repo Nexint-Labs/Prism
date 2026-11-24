@@ -12,6 +12,7 @@ const { followUpContainer } = require('#functions/discord/container/followUpCont
 const { createContainer } = require('#functions/discord/container/container');
 const { warning } = require('#config/discord/visual/botAssets');
 const { apiName } = require('#config/discord/api/NexAPI');
+const { log } = require('#functions/core/log.mjs');
 
 module.exports = {
     cooldown: 5,
@@ -31,7 +32,7 @@ module.exports = {
         }
 
         // Add to analytics
-        addCommandsUsed(interaction.user);
+        await addCommandsUsed(interaction.user);
 
         const userId = interaction.user.id;
 
@@ -218,7 +219,7 @@ module.exports = {
                 )
             }
         } catch (error) {
-            console.error("Divorce notification error:", error);
+            log.error("Divorce notification error:", error);
 
             await followUpContainer(
                 interaction,

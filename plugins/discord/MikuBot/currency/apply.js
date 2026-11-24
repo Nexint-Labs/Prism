@@ -290,7 +290,7 @@ module.exports = {
                     }
 
                     // analytics
-                    addCommandsUsed(interaction.user);
+                    await addCommandsUsed(interaction.user);
 
                     // Send message
                     container = await createContainer(

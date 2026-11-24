@@ -31,7 +31,7 @@ module.exports = {
 		const answer = getAnswer();
 
 		// Add to analytics
-		addCommandsUsed(interaction.user);
+		await addCommandsUsed(interaction.user);
 
 		// Artificial Embed
 		await loadAnim(

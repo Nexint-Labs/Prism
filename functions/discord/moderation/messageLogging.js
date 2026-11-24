@@ -1,4 +1,5 @@
 const { pfp } = require('#config/discord/visual/botAssets');
+const { log } = require('#functions/core/log.mjs');
 const { queryModChannels } = require('#functions/discord/moderation/databaseQueries/addModChannels');
 const { createAdvancedContainer } = require('../container/container');
 const { MessageFlags } = require('discord.js');
@@ -113,7 +114,7 @@ const logMessage = async function (msg, type, oldMessage = null) {
         }
 
         default:
-            console.log("A major error has occured with a bot plugin!")
+            log.error("A major error has occured with a bot plugin!")
     }
 
 }

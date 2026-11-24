@@ -2,6 +2,7 @@ const { queryModChannels } = require('#functions/discord/moderation/databaseQuer
 const { MessageFlags } = require('discord.js');
 const { createAdvancedContainer } = require('#functions/discord/container/container');
 const { pfp } = require('#config/discord/visual/botAssets');
+const { log } = require('#functions/core/log.mjs');
 
 const sendLog = async (color, components, modChannel) => {
     const container = await createAdvancedContainer({
@@ -128,7 +129,7 @@ const moderateContainer = async function (guildId, type, reason, msg = null, mod
     const config = actions[type];
 
     if (!config) {
-        console.error(`Unknown moderation event type: ${type}`);
+        log.error(`Unknown moderation event type: ${type}`);
         return;
     }
 

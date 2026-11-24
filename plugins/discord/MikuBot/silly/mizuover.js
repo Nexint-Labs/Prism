@@ -21,7 +21,7 @@ module.exports = {
         }
 
         // Add to analytics
-        addCommandsUsed(interaction.user);
+        await addCommandsUsed(interaction.user);
 
         // Send reply
         await replyContainer(

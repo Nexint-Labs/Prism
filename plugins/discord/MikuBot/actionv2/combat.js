@@ -12,6 +12,7 @@ const { pluralValues } = require('#functions/discord/core/pluralValues');
 const { expGain } = require('#functions/discord/currency/xp');
 const { dmGifNotify } = require('#functions/discord/notify/dmNotify');
 const { actions } = require('#config/discord/act/combat');
+const { log } = require('#functions/core/log.mjs');
 
 const data = new SlashCommandBuilder()
     .setName('fight')
@@ -151,7 +152,7 @@ module.exports = {
         ], true)
 
         // Tracking
-        addCommandsUsed(interaction.user);
+        await addCommandsUsed(interaction.user);
 
         // EXP Gain (for level system)
         await expGain(interaction.user);
@@ -205,7 +206,7 @@ module.exports = {
                         count = result.content.value;
                     }
                 } catch (error) {
-                    console.error('[Action API]', error);
+                    log.error('Action API Error has occured.', error);
                 }
 
                 description = action.counter(actorName, targetName, count);

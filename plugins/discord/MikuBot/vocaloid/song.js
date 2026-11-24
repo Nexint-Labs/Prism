@@ -23,6 +23,7 @@ const { MessageFlags } = require('discord.js');
 const { warning } = require('#config/discord/visual/botAssets');
 const { simpleMenu } = require('#functions/discord/container/menus/pageHandler');
 const { loadAnim } = require('#functions/discord/helpers/load');
+const { log } = require('#functions/core/log.mjs');
 
 const data = new SlashCommandBuilder()
     .setName('song')
@@ -176,7 +177,7 @@ async function sendSongList(interaction, response, songs, title) {
 function recordUsage(interaction) {
     addCommandsUsed(interaction.user);
     if (interaction.guild && Math.random() > 0.5) {
-        void Promise.resolve(expGain(interaction.user)).catch(console.error);
+        void Promise.resolve(expGain(interaction.user));
     }
 }
 
@@ -209,7 +210,7 @@ module.exports = {
                 }))
             );
         } catch (error) {
-            console.error('[Song Autocomplete]', error);
+            log.error('Song autocomplete error has happened.', error);
 
             if (!interaction.responded) {
                 await interaction.respond([]).catch(() => { });
@@ -345,7 +346,7 @@ module.exports = {
             recordUsage(interaction);
 
         } catch (error) {
-            console.error('[Song Command Error]', error);
+            log.error('Song command error has happened.', error);
 
             await replyContainer(
                 interaction,
@@ -353,7 +354,7 @@ module.exports = {
                 ['Could not retrieve song information right now. Please try again later.'],
                 'warn',
                 warning,
-            ).catch(console.error);
+            );
         }
     },
 };

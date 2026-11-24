@@ -1,15 +1,15 @@
 const { getAPI } = require('#functions/discord/api/fetch');
 const { delay, advertChance } = require('#config/discord/api/NexAPI');
+const { log } = require('#functions/core/log.mjs');
 
 let adverts = null;
 let date = Math.floor(Date.now() / 1000);
 
 /**
  * Nabs an advertisement from my server!
- * @param {String} description 
  * @returns {Promise<string | null>}
  */
-const getAdvert = async function (description) {
+const getAdvert = async function () {
     let advertisement = "";
 
     // cached advertisement data
@@ -21,6 +21,7 @@ const getAdvert = async function (description) {
         const connect = await getAPI("/advert");
         if (connect.error) {
 
+            log.error("The advertisement API is down.", connect)
             // Null if error.
             return null;
 

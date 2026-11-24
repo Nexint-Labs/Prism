@@ -1,3 +1,4 @@
+const { log } = require('#functions/core/log.mjs');
 const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
 const handleInteractionError = async function (interaction, response, error) {
 
@@ -23,7 +24,7 @@ const handleInteractionError = async function (interaction, response, error) {
             components: disabledRows
         }).catch(() => null);
     } else {
-        console.error("Interaction error:", error);
+        log.error("Interaction error:", error);
     }
 }
 

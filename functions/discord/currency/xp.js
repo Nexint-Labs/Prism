@@ -36,12 +36,6 @@ const expGain = async function (user) {
             }
         } catch (error) {
             log.error(`A serious error has occured while gaining xp.`, error)
-            if (
-                error.rawError?.message !==
-                'Cannot send messages to this user'
-            ) {
-                console.error('[Currency XP] DM failed:', error);
-            }
         }
     }
 

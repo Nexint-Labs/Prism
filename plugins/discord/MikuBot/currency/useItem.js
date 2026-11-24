@@ -11,6 +11,7 @@ const { createContainer } = require('#functions/discord/container/container');
 const { pluralValues } = require('#functions/discord/core/pluralValues');
 const { confirm } = require('#functions/discord/container/menus/confirm');
 const { abbrevBalance } = require('#functions/discord/helpers/abbrevValues');
+const { log } = require('#functions/core/log.mjs');
 
 module.exports = {
     cooldown: 5,
@@ -49,7 +50,7 @@ module.exports = {
 
             await interaction.respond(choices);
         } catch (error) {
-            console.error('[Currency] Item autocomplete failed:', error);
+            log.error('Item autocomplete failed:', error);
 
             if (!interaction.responded) {
                 await interaction.respond([]).catch(() => { });
@@ -217,7 +218,7 @@ module.exports = {
 
             const promptContainer = await createContainer(
                 "Use Item",
-                [`Are you sure you want to use / eat ${(await abbrevBalance(qty)).displayValue} ${item.name}${pluralValues(qty)}?`,],
+                [`Are you sure you want to use / eat ${(abbrevBalance(qty)).displayValue} ${item.name}${pluralValues(qty)}?`,],
                 "default",
                 null,
                 {

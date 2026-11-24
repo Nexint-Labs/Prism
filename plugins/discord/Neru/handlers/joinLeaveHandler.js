@@ -64,7 +64,7 @@ module.exports = {
                 // Log errors
                 for (const result of results) {
                     if (result.status === "rejected") {
-                        console.error("Welcome message failed:", result.reason);
+                        log.error("Welcome message failed:", result.reason);
                     }
                 }
             } catch (error) {
@@ -90,7 +90,7 @@ module.exports = {
                 // Log errors
                 for (const result of results) {
                     if (result.status === "rejected") {
-                        console.error("Leave message failed:", result.reason);
+                        log.error("Leave message failed:", result.reason);
                     }
                 }
             } catch (error) {

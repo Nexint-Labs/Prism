@@ -10,18 +10,22 @@ const { log } = require("#functions/core/log.mjs");
  * @returns 
  */
 const addCommandsUsed = async function (member) {
-    let command;
-    let user;
-    if (!(await optOutChkSingle(member))) {
-        await addCmd();
-        command = await queryCommand();
-        user = await queryUser(member);
-        user.value += 1;
-        command.value += 1;
-        await command.save();
-        await user.save();
+    try {
+        let command;
+        let user;
+        if (!(await optOutChkSingle(member))) {
+            await addCmd();
+            command = await queryCommand();
+            user = await queryUser(member);
+            user.value += 1;
+            command.value += 1;
+            await command.save();
+            await user.save();
+        }
+        return command;
+    } catch (error) {
+        log.error("A serious bug happened while tracking analytics.", error)
     }
-    return command;
 }
 
 
@@ -99,7 +103,7 @@ const optOutUsageData = async function (interaction) {
         await userinfo.destroy({ where: { userId: interaction.user.id } })
 
         return true;
-    } catch {
+    } catch (error) {
         log.error(`An error has occured while trying to opt out ${interaction.user}.`, error)
         return false;
     }

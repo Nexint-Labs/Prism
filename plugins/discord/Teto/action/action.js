@@ -80,7 +80,7 @@ module.exports = {
         const actionProcessed = interaction.options.getString("action");
 
         // Add to analytics
-        addCommandsUsed(interaction.user);
+        await addCommandsUsed(interaction.user);
 
         // Level Gain (50/50)
         if (interaction.guild != null && Math.random() > 0.5) {

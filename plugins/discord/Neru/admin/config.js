@@ -3,6 +3,7 @@ const { InteractionContextType, SlashCommandBuilder, PermissionFlagsBits, Messag
 const { replyContainer } = require('#functions/discord/container/replyContainer');
 const { createConfigEngine, getConfigDefinitions } = require("#functions/discord/moderation/helpers/configEngine");
 const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
+const { log } = require('#functions/core/log.mjs');
 
 const data = new SlashCommandBuilder()
     .setName("config")
@@ -175,7 +176,7 @@ module.exports = {
                 result.error ? "warn" : "info"
             );
         } catch (error) {
-            console.error("[Config]", error);
+            log.error("A config error has occured.", error);
 
             return await replyContainer(
                 interaction,

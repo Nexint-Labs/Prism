@@ -5,6 +5,7 @@ const { automodDeletedMessages } = require("#functions/discord/moderation/delete
 const { moderateContainer } = require('#functions/discord/moderation/moderateContainer');
 const { Message } = require('discord.js');
 const delay = require('#functions/core/delay');
+const { log } = require("#functions/core/log.mjs");
 const linkify = new LinkifyIt({ fuzzyLink: true });
 
 const whitelist = new Set([
@@ -76,7 +77,7 @@ const logWarning = async function (msg, reason) {
     try {
         await moderateContainer(msg.guildId, "automod", reason, msg);
     } catch (error) {
-        console.error("[AutoMod] Logging failed:", error);
+        log.error("Logging failed:", error);
     }
 }
 
@@ -96,7 +97,7 @@ const sendWarning = async function (msg, reason) {
         await delay(5000);
         await warning.delete().catch(() => { });
     } catch (error) {
-        console.error("[AutoMod] Warning failed:", error);
+        log.error("Warning failed:", error);
     }
 }
 

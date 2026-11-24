@@ -202,11 +202,7 @@ module.exports = {
 		msg += "\n-# Legal disclaimer: **I do not endorse actual crimes.**";
 
 		// analytics tracking
-		try {
-			await addCommandsUsed(interaction.user);
-		} catch (error) {
-			log.error('Analytics failed:', error);
-		}
+		await addCommandsUsed(interaction.user);
 
 		// send message
 
@@ -225,9 +221,11 @@ module.exports = {
 			} else {
 				result = await dmNotify(guildMember, [`${interaction.user.displayName} has robbed you of ${coins.displayValue} ${prefix(coins.value)} in the channel ${messageUrl}.\nYour new balance: ${(abbrevBalance(victimBalance)).displayValue} ${prefix(victimBalance)}.`], null, null);
 			}
-			if (result !== 0 && result?.rawError?.message != "Cannot send messages to this user") console.log(result);
+			if (result !== 0 && result?.rawError?.message != "Cannot send messages to this user") {
+				log.error(result);
+			}
 		} catch (error) {
-			console.error('[Rob] DM failed:', error);
+			log.error('DM failed:', error);
 		}
 	},
 };

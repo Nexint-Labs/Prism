@@ -4,6 +4,7 @@ const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { replyContainer } = require('#functions/discord/container/replyContainer');
 const { claimChatRevive } = require('#functions/discord/moderation/databaseQueries/addChatRevive');
 const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
+const { log } = require('#functions/core/log.mjs');
 module.exports = {
     cooldown: 5,
 
@@ -72,7 +73,7 @@ module.exports = {
                 }
             });
         } catch (error) {
-            console.error('Failed to send chat revive ping:', error);
+            log.error('Failed to send chat revive ping:', error);
 
             // The cooldown was already claimed.
             // Do not automatically reset it here because another

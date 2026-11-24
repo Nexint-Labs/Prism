@@ -12,6 +12,7 @@ const { listUnreadNotifs, listAllNotifs } = require('#functions/discord/notify/l
 const { warning } = require('#config/discord/visual/botAssets');
 const { replyContainer } = require('#functions/discord/container/replyContainer');
 const { loadAnim } = require('#functions/discord/helpers/load');
+const { log } = require('#functions/core/log.mjs');
 
 module.exports = {
     cooldown: 5,
@@ -49,7 +50,7 @@ module.exports = {
         ], true)
 
         // Add to analytics
-        addCommandsUsed(interaction.user);
+        await addCommandsUsed(interaction.user);
 
         // Get the notifications
         const fetchNotifs = async () => {
@@ -62,7 +63,7 @@ module.exports = {
                     result = await listAllNotifs(interaction, true);
                     break;
                 default:
-                    console.log("Oops! This shouldn't happen lol")
+                    log.error("Oops! This shouldn't happen lol")
             }
 
             if (result.error) return null;

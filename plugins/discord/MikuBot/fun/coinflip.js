@@ -51,7 +51,7 @@ module.exports = {
 		await delay(2000);
 
 		// Add to analytics
-		addCommandsUsed(interaction.user);
+		await addCommandsUsed(interaction.user);
 
 		// Send reply
 		await replyContainer(

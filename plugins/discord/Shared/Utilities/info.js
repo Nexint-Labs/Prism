@@ -95,9 +95,9 @@ module.exports = {
 		let bal = ""
 		bal += `**Currency Stats:**\n`;
 		bal += `Currency Members: ${balances.length} (${banks.length} bank accounts)\n`;
-		bal += `Total Balance: ${(await abbrevBalance(totalBalance)).displayValue}\n`;
-		bal += `Total Banks: ${(await abbrevBalance(totalBank)).displayValue}\n`;
-		bal += `Total Net (excl. items): ${(await abbrevBalance(totalBalance + totalBank)).displayValue}\n\n`;
+		bal += `Total Balance: ${(abbrevBalance(totalBalance)).displayValue}\n`;
+		bal += `Total Banks: ${(abbrevBalance(totalBank)).displayValue}\n`;
+		bal += `Total Net (excl. items): ${(abbrevBalance(totalBalance + totalBank)).displayValue}\n\n`;
 
 		// stats
 		let stats = ""

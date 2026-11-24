@@ -6,8 +6,6 @@ const { queryModeration, allowModeration, denyModeration } = require("#functions
 
 const createConfigEngine = (interaction) => {
     const onSubmit = async (item, values) => {
-        console.log("Setting:", item.id);
-        console.log("New value:", values);
 
         switch (item.id) {
             case "moderation": {

@@ -17,7 +17,7 @@ const handleInteraction = async function (client, interaction) {
 		try {
 			await command.autocomplete(interaction);
 		} catch (error) {
-			console.error('[Autocomplete Error]', error);
+			log.error('A serious error happened while auto completing!', error);
 
 			if (!interaction.responded) {
 				await interaction.respond([]).catch(() => { });
@@ -32,7 +32,7 @@ const handleInteraction = async function (client, interaction) {
 	const command = client.commands.get(interaction.commandName);
 
 	if (!command) {
-		console.error(`No command matching ${interaction.commandName} was found.`);
+		log.error(`No command matching ${interaction.commandName} was found.`);
 		return;
 	}
 

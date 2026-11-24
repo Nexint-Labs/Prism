@@ -48,7 +48,7 @@ module.exports = {
         }
 
         // Add to analytics
-        addCommandsUsed(interaction.user);
+        await addCommandsUsed(interaction.user);
 
         const subcommand = interaction.options.getSubcommand();
         const userId = interaction.user.id;

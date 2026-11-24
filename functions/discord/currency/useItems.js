@@ -6,6 +6,7 @@ const { abbrevBalance } = require('#functions/discord/helpers/abbrevValues');
 const { pluralValues, prefix } = require('#functions/discord/core/pluralValues');
 const { dmNotify } = require('#functions/discord/notify/dmNotify');
 const { getAPI, postAPI } = require('#functions/discord/api/fetch');
+const { log } = require('#functions/core/log.mjs');
 
 const useItem = async function (itemList, interaction, qty, guildMember, response) {
 
@@ -97,7 +98,7 @@ const useItem = async function (itemList, interaction, qty, guildMember, respons
         const duration = item.effects.multiplier.duration;
         const days = (duration * qty) / (24 * 60 * 60 * 1000);
 
-        msg = `Ate ${(abbrevBalance(qty)).displayValue} ${item.name}${pluralValues(qty)}, extending your ${item.effects.multiplier.value}x multiplier by ${days} day${pluralValues(days)}.\nYour multiplier expires <t:${Math.floor(result.content.nextExpiry / 1000)}:R>.\nYou now have ${(await abbrevBalance(itemList.value)).displayValue} ${item.name}${pluralValues(itemList.value)}.`;
+        msg = `Ate ${(abbrevBalance(qty)).displayValue} ${item.name}${pluralValues(qty)}, extending your ${item.effects.multiplier.value}x multiplier by ${days} day${pluralValues(days)}.\nYour multiplier expires <t:${Math.floor(result.content.nextExpiry / 1000)}:R>.\nYou now have ${(abbrevBalance(itemList.value)).displayValue} ${item.name}${pluralValues(itemList.value)}.`;
     } else {
         switch (itemId) {
 
@@ -124,7 +125,7 @@ const useItem = async function (itemList, interaction, qty, guildMember, respons
                 itemList = result.content.inventory;
                 const bankUser = result.content.vault;
 
-                msg = `Bank balance increased by ${(abbrevBalance(result.content.increase)).displayValue} ${prefix(result.content.increase)}.\nNew Bank balance: ${(abbrevBalance(bankUser.value)).displayValue} / ${(abbrevBalance(bankUser.maxValue)).displayValue}\nYou now have ${itemList.value} banknote${pluralValues(itemList.value)}`;
+                msg = `Bank balance increased by ${(abbrevBalance(result.content.increase)).displayValue} ${prefix(result.content.increase)}.\nNew Bank balance: ${(abbrevBalance(bankUser.value)).displayValue} / ${(abbrevBalance(bankUser.maxValue)).displayValue} ${prefix(bankUser.maxValue)}\nYou now have ${itemList.value} banknote${pluralValues(itemList.value)}`;
                 break;
             }
 
@@ -184,11 +185,11 @@ const useItem = async function (itemList, interaction, qty, guildMember, respons
                     rewardName = rewardItem?.name ?? rewardName;
 
                     const rewardQty = (
-                        await abbrevBalance(lootbox.qty[i])
+                        abbrevBalance(lootbox.qty[i])
                     ).displayValue;
 
                     const newBalance = (
-                        await abbrevBalance(lootbox.newBalances[i])
+                        abbrevBalance(lootbox.newBalances[i])
                     ).displayValue;
 
                     rewardLines.push(
@@ -199,7 +200,7 @@ const useItem = async function (itemList, interaction, qty, guildMember, respons
 
                 msg = `You opened ${qty} ${item.name}${pluralValues(qty)}, and got the following:\n` +
                     rewardLines.join('\n') +
-                    `\nYou now have ${(await abbrevBalance(itemList.value)).displayValue} ${item.name}${pluralValues(itemList.value)}.`;
+                    `\nYou now have ${(abbrevBalance(itemList.value)).displayValue} ${item.name}${pluralValues(itemList.value)}.`;
                 break;
             }
 
@@ -226,37 +227,26 @@ const useItem = async function (itemList, interaction, qty, guildMember, respons
 
                 itemList = result.content;
 
-                msg = `Ate ${(await abbrevBalance(qty)).displayValue} ${item.name}${pluralValues(qty)}, and nothing happened.\nYou now have ${(await abbrevBalance(itemList.value)).displayValue} ${item.name}${pluralValues(itemList.value)}.`;
+                msg = `Ate ${(abbrevBalance(qty)).displayValue} ${item.name}${pluralValues(qty)}, and nothing happened.\nYou now have ${(abbrevBalance(itemList.value)).displayValue} ${item.name}${pluralValues(itemList.value)}.`;
                 break;
             }
         }
     }
 
-    try {
-        await addCommandsUsed(interaction.user);
-    } catch (error) {
-        console.error('[Currency] Item-use analytics failed:', error);
-    }
+    await addCommandsUsed(interaction.user);
     await replyContainer(
         interaction,
         "Item used!",
         [msg]
     )
 
-    try {
-        const result = await dmNotify(
-            guildMember,
-            [`You have used ${(await abbrevBalance(qty)).displayValue} ${item.name}${pluralValues(qty)} in the channel ${(response?.resource?.message?.url || interaction.channel?.url || 'this channel')}!\nYour new balance: ${(await abbrevBalance(itemList.value)).displayValue} ${item.name}${pluralValues(itemList.value)}.`]
-        );
+    const result = await dmNotify(
+        guildMember,
+        [`You have used ${(abbrevBalance(qty)).displayValue} ${item.name}${pluralValues(qty)} in the channel ${(response?.resource?.message?.url || interaction.channel?.url || 'this channel')}!\nYour new balance: ${(abbrevBalance(itemList.value)).displayValue} ${item.name}${pluralValues(itemList.value)}.`]
+    );
 
-        if (
-            result && result !== 0 &&
-            result?.rawError?.message !== "Cannot send messages to this user"
-        ) {
-            console.error('[Currency] Item-use DM failed:', result);
-        }
-    } catch (error) {
-        console.error('[Currency] Item-use DM failed:', error);
+    if (result && result.rawError?.message !== "Cannot send messages to this user") {
+        log.error('Item-use DM failed:', result);
     }
 };
 

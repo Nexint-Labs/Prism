@@ -701,7 +701,7 @@ module.exports = {
         }
 
         // Add to analytics
-        addCommandsUsed(interaction.user);
+        await addCommandsUsed(interaction.user);
 
         // Level gain (50/50)
         await expGain(interaction.user);

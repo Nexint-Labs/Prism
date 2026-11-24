@@ -13,6 +13,7 @@ const { optOutChkSingle } = require('#functions/discord/opt-out/optOut');
 const { postAPI, queryAPI } = require('#functions/discord/api/fetch');
 const { getUsername } = require('#functions/discord/core/getUsername');
 const { pluginName } = require('#config/cosmetic/config');
+const { log } = require('#functions/core/log.mjs');
 
 module.exports = {
 	cooldown: 5,
@@ -430,7 +431,7 @@ module.exports = {
 		let row = await rowBuild();
 
 		// analytics
-		addCommandsUsed(interaction.user);
+		await addCommandsUsed(interaction.user);
 
 		// send reply
 		await interaction.editReply({
@@ -441,7 +442,7 @@ module.exports = {
 		try {
 			await followUpNotif(interaction);
 		} catch (error) {
-			console.error('[Blackjack] Notification failed:', error);
+			log.error('Notification failed:', error);
 		}
 
 		// balance refresh function
