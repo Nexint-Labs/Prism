@@ -10,8 +10,8 @@ module.exports = {
     verbose: false, // Extra Logging Info
     autoUpdate: true,
     frameName: "Prism", // Unified Framework Name
-    frameVer: "0.7.3-dev", // Unified Framework version
-    frameID: 21, // Framework version ID
+    frameVer: "0.7.4-prod", // Unified Framework version
+    frameID: 22, // Framework version ID
     updateURL: "https://github.com/Nexint-Labs/NexAPIv2/",
     updateSource: "https://raw.githubusercontent.com/Nexint-Labs/NexAPIv2/refs/heads/main", // prolly dont change this unless you know what ur doing
 
