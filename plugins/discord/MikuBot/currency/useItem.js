@@ -8,7 +8,7 @@ const { warning } = require('#config/discord/visual/botAssets');
 const { optOutChkSingle } = require('#functions/discord/opt-out/optOut');
 const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
 const { createContainer } = require('#functions/discord/container/container');
-const { pluralValues } = require('#functions/discord/core/pluralValues');
+const { pluralValues, prefix } = require('#functions/discord/core/pluralValues');
 const { confirm } = require('#functions/discord/container/menus/confirm');
 const { abbrevBalance } = require('#functions/discord/helpers/abbrevValues');
 

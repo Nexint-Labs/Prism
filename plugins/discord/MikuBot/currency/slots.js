@@ -182,7 +182,7 @@ module.exports = {
 		// artificial delay to make it look interesting
 		await loadAnim(
 			interaction,
-			[`Rolling ${(abbrevBalance(Math.abs(addedCoins))).displayValue} coins\n\n[${emoji.typeEmoji}][${emoji.typeEmoji}][${emoji.typeEmoji}]`],
+			[`Rolling ${(abbrevBalance(Math.abs(addedCoins))).displayValue} ${prefix(Math.abs(addedCoins))}...\n\n[${emoji.typeEmoji}][${emoji.typeEmoji}][${emoji.typeEmoji}]`],
 			false
 		)
 		await delay(3000);
@@ -196,24 +196,24 @@ module.exports = {
 			// Prepare message
 			let msg = "";
 			if (shortened) {
-				msg = `You decided to gamble ${addedCoins.displayValue} coins and got:\n\n`
+				msg = `You decided to gamble ${addedCoins.displayValue} ${prefix(addedCoins.value)} and got:\n\n`
 				for (let i = 0; i < slotLength; i++) {
 					msg += `[${slotValues[slots[i]]}]`
 				}
 				if (reward) {
-					msg += `\n\nmaking ${multiplier}x your coins.\nYour updated balance: ${newCoinAmt.displayValue} coins.`
+					msg += `\n\nmaking ${multiplier}x your ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.value)}.`
 				} else {
-					msg += `\n\nlosing all of your wagered coins.\nYour updated balance: ${newCoinAmt.displayValue} coins.`
+					msg += `\n\nlosing all of your wagered ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.value)}.`
 				}
 			} else {
-				msg = `You decided to gamble ${addedCoins.value} coins and got:\n\n`
+				msg = `You decided to gamble ${addedCoins.value} ${prefix(addedCoins.value)} and got:\n\n`
 				for (let i = 0; i < slotLength; i++) {
 					msg += `[${slotValues[slots[i]]}]`
 				}
 				if (reward) {
-					msg += `\n\nmaking ${multiplier}x your coins.\nYour updated balance: ${newCoinAmt.value} coins.`
+					msg += `\n\nmaking ${multiplier}x your ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.value} ${prefix(newCoinAmt.value)}.`
 				} else {
-					msg += `\n\nlosing all of your wagered coins.\nYour updated balance: ${newCoinAmt.value} coins.`
+					msg += `\n\nlosing all of your wagered ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.value} ${prefix(newCoinAmt.value)}.`
 				}
 			}
 			if (level > 0) {

@@ -137,9 +137,9 @@ module.exports = {
 			// net worth code
 			const net = itemNetWorth ?? 0;
 			if (shortened) {
-				msgBalance += `\nNet Worth: ${(abbrevBalance(net + bankBalanceUser.value + balanceUser2.value)).displayValue} ${prefix(net + bankBalanceUser.value + balanceUser2.value)} (${(abbrevBalance(net)).displayValue} from items)`
+				msgBalance += `\nNet Worth: ${(abbrevBalance(net + bankBalanceUser.value + balanceUser2.value)).displayValue} ${prefix(net + bankBalanceUser.value + balanceUser2.value)} (${(abbrevBalance(net)).displayValue} ${prefix(net)} from items)`
 			} else {
-				msgBalance += `\nNet Worth: ${(abbrevBalance(net + bankBalanceUser.value + balanceUser2.value)).value} ${prefix(net + bankBalanceUser.value + balanceUser2.value)} (${(abbrevBalance(net)).value} from items)`
+				msgBalance += `\nNet Worth: ${(abbrevBalance(net + bankBalanceUser.value + balanceUser2.value)).value} ${prefix(net + bankBalanceUser.value + balanceUser2.value)} (${(abbrevBalance(net)).value} ${prefix(net)} from items)`
 			}
 
 			// Job
@@ -149,7 +149,7 @@ module.exports = {
 				} else {
 					msgJob += `\nJob: ${jobInfo.name} (Worked ${(abbrevBalance(workUser.workCount)).displayValue} times)`
 					msgJob += `\n-#  (Idea from ${jobInfo.credit})`
-					msgJob += `\nWage: ${(abbrevBalance(workUser.wage)).displayValue} (+-20%)`;
+					msgJob += `\nWage: ${(abbrevBalance(workUser.wage)).displayValue} ${prefix(workUser.wage)} (+-20%)`;
 				}
 			} else {
 				if (!workUser || workUser.jobId == -1 || !jobInfo) {
@@ -157,7 +157,7 @@ module.exports = {
 				} else {
 					msgJob += `\nJob: ${jobInfo.name} (Worked ${(abbrevBalance(workUser.workCount)).value} times)`
 					msgJob += `\n-#  (Idea from ${jobInfo.credit})`
-					msgJob += `\nWage: ${(abbrevBalance(workUser.wage)).value} (+-20%)`;
+					msgJob += `\nWage: ${(abbrevBalance(workUser.wage)).value} ${prefix(workUser.wage)} (+-20%)`;
 				}
 
 			}

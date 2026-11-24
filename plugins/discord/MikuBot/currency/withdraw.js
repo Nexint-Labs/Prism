@@ -88,7 +88,7 @@ module.exports = {
 			await replyContainer(
 				interaction,
 				"Withdraw",
-				["You must withdraw a positive amount of coins."],
+				[`You must withdraw a positive amount of ${prefix(transfer)}.`],
 				"warn",
 				warning,
 				{ advert: false }
@@ -109,7 +109,7 @@ module.exports = {
 				await replyContainer(
 					interaction,
 					"Withdraw",
-					["You have insufficient funds to perform this action."],
+					[`You have insufficient ${prefix(1)} to perform this action.`],
 					"warn",
 					warning,
 					{

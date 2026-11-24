@@ -223,7 +223,7 @@ module.exports = {
 			if (robResult.outcome === 'FAILED') {
 				result = await dmNotify(guildMember, [`${interaction.user.displayName} tried robbing you in the channel ${messageUrl}, but failed.\nYour new balance: ${(abbrevBalance(victimBalance)).displayValue} ${prefix(victimBalance)}.`], null, null);
 			} else {
-				result = await dmNotify(guildMember, [`${interaction.user.displayName} has robbed you of ${coins.displayValue} ${prefix(coins.displayValue)} in the channel ${messageUrl}.\nYour new balance: ${(abbrevBalance(victimBalance)).displayValue} ${prefix(victimBalance)}.`], null, null);
+				result = await dmNotify(guildMember, [`${interaction.user.displayName} has robbed you of ${coins.displayValue} ${prefix(coins.value)} in the channel ${messageUrl}.\nYour new balance: ${(abbrevBalance(victimBalance)).displayValue} ${prefix(victimBalance)}.`], null, null);
 			}
 			if (result !== 0 && result?.rawError?.message != "Cannot send messages to this user") console.log(result);
 		} catch (error) {
