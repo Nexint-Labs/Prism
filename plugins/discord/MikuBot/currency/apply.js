@@ -11,6 +11,7 @@ const { createAdvancedContainer, createContainer } = require('#functions/discord
 const { handleInteractionError } = require('#functions/discord/helpers/handleInteractionError');
 const { postAPI, queryAPI } = require('#functions/discord/api/fetch');
 const { getUsername } = require('#functions/discord/core/getUsername');
+const { prefix } = require('#functions/discord/core/pluralValues');
 
 module.exports = {
     cooldown: 30,
@@ -92,12 +93,12 @@ module.exports = {
                 if (shortened) {
                     components.push({
                         type: "text",
-                        content: `| · Wage: ${(await abbrevBalance(choices[i][1])).displayValue}\n| · Days before fired: ${(await abbrevBalance(jobs[choices[i][0]].maxDays)).displayValue}\n| · Odds: ${Math.round((jobs[choices[i][0]].chance / chance) * 10000) / 100}%`
+                        content: `| · Wage: ${(abbrevBalance(choices[i][1])).displayValue} ${prefix(choices[i][1])}\n| · Days before fired: ${(abbrevBalance(jobs[choices[i][0]].maxDays)).displayValue}\n| · Odds: ${Math.round((jobs[choices[i][0]].chance / chance) * 10000) / 100}%`
                     })
                 } else {
                     components.push({
                         type: "text",
-                        content: `| · Wage: ${(await abbrevBalance(choices[i][1])).value}\n| · Days before fired: ${jobs[choices[i][0]].maxDays}\n| · Odds: ${Math.round((jobs[choices[i][0]].chance / chance) * 10000) / 100}%`
+                        content: `| · Wage: ${(abbrevBalance(choices[i][1])).value} ${prefix(choices[i][1])}\n| · Days before fired: ${jobs[choices[i][0]].maxDays}\n| · Odds: ${Math.round((jobs[choices[i][0]].chance / chance) * 10000) / 100}%`
                     })
                 }
             }
@@ -228,7 +229,7 @@ module.exports = {
                                 [
                                     `Do you wish to apply for Job ${Number(confirmation.customId) + 1} (${jobs[choices[confirmation.customId][0]].name})?`,
                                     "**Job Stats:**",
-                                    `| · Wage: ${(await abbrevBalance(choices[confirmation.customId][1])).displayValue}\n| · Days Till Fired: ${jobs[choices[confirmation.customId][0]].maxDays}`
+                                    `| · Wage: ${(abbrevBalance(choices[confirmation.customId][1])).displayValue} ${prefix(choices[confirmation.customId][1])}\n| · Days Till Fired: ${jobs[choices[confirmation.customId][0]].maxDays}`
                                 ]
                             );
                         } else {
@@ -237,7 +238,7 @@ module.exports = {
                                 [
                                     `Do you wish to apply for Job ${Number(confirmation.customId) + 1} (${jobs[choices[confirmation.customId][0]].name})?`,
                                     "**Job Stats:**",
-                                    `| · Wage: ${(await abbrevBalance(choices[confirmation.customId][1])).value}\n| · Days Till Fired: ${jobs[choices[confirmation.customId][0]].maxDays}`
+                                    `| · Wage: ${(abbrevBalance(choices[confirmation.customId][1])).value} ${prefix(choices[confirmation.customId][1])}\n| · Days Till Fired: ${jobs[choices[confirmation.customId][0]].maxDays}`
                                 ]
                             );
                         }
@@ -294,7 +295,7 @@ module.exports = {
                     // Send message
                     container = await createContainer(
                         "Apply",
-                        [`You are now a(n) ${jobs[choices[appliedJob][0]].name}. Your starting salary is ${request.content.wage} coins.`],
+                        [`You are now a(n) ${jobs[choices[appliedJob][0]].name}. Your starting salary is ${request.content.wage} ${prefix(request.content.wage)}.`],
                         "default"
                     );
                     await confirmation.update({
@@ -302,7 +303,7 @@ module.exports = {
                     });
 
                     // DM Notify
-                    let result = await dmNotify(guildMember, [`You are now a(n) ${jobs[choices[appliedJob][0]].name}.\nYour starting salary is ${request.content.wage} coins.\nYou applied here: ${response.resource.message.url}!`]);
+                    let result = await dmNotify(guildMember, [`You are now a(n) ${jobs[choices[appliedJob][0]].name}.\nYour starting salary is ${request.content.wage} ${prefix(request.content.wage)}.\nYou applied here: ${response.resource.message.url}!`]);
                     if (result !== 0 && result.rawError.message != "Cannot send messages to this user") {
                         throw result;
                     }
