@@ -1,5 +1,6 @@
 const { moderateMessage } = require('#functions/discord/moderation/moderateMessage');
 const { logMessage } = require('#functions/discord/moderation/messageLogging');
+const { log } = require('#functions/core/log.mjs');
 
 module.exports = {
     async execute(client) {
@@ -22,7 +23,7 @@ module.exports = {
                 await logMessage(newMessage, "edit", oldMessage);
 
             } catch (error) {
-                console.error("Message update moderation error:", error);
+                log.error("Message update moderation error:", error);
             }
         });
     }

@@ -1,3 +1,4 @@
+const { log } = require("#functions/core/log.mjs");
 const { joinMessage, leaveMessage } = require("#preload/db/moderation");
 
 const channelMessage = async function (ids, member) {
@@ -44,48 +45,56 @@ const channelMessage = async function (ids, member) {
 
 module.exports = {
     async execute(client) {
-		// Enforce client
-		if (!client) {
-			return;
-		}
+        // Enforce client
+        if (!client) {
+            return;
+        }
         client.on("guildMemberAdd", async member => {
+            try {
+                // Finds all whatevers of people that joined
+                const joinList = await joinMessage.findAll({
+                    where: { guildId: member.guild.id }
+                });
 
-            // Finds all whatevers of people that joined
-            const joinList = await joinMessage.findAll({
-                where: { guildId: member.guild.id }
-            });
+                // Map all joins onto a new results array, and execute all promises asyncronously.
+                const results = await Promise.allSettled(
+                    joinList.map(config => channelMessage(config, member))
+                );
 
-            // Map all joins onto a new results array, and execute all promises asyncronously.
-            const results = await Promise.allSettled(
-                joinList.map(config => channelMessage(config, member))
-            );
-
-            // Log errors
-            for (const result of results) {
-                if (result.status === "rejected") {
-                    console.error("Welcome message failed:", result.reason);
+                // Log errors
+                for (const result of results) {
+                    if (result.status === "rejected") {
+                        console.error("Welcome message failed:", result.reason);
+                    }
                 }
+            } catch (error) {
+                log.error("Join message error:", error)
             }
         });
 
         // this is literally the same code as the code above bro what are we doing
         client.on("guildMemberRemove", async member => {
-            const leaveList = await leaveMessage.findAll({
-                where: {
-                    guildId: member.guild.id
-                }
-            });
+            try {
+                // Finds all whatevers of people that left
+                const leaveList = await leaveMessage.findAll({
+                    where: {
+                        guildId: member.guild.id
+                    }
+                });
 
-            // Map a list of leave memssages.
-            const results = await Promise.allSettled(
-                leaveList.map(config => channelMessage(config, member))
-            );
+                // Map a list of leave memssages.
+                const results = await Promise.allSettled(
+                    leaveList.map(config => channelMessage(config, member))
+                );
 
-            // Log errors
-            for (const result of results) {
-                if (result.status === "rejected") {
-                    console.error("Leave message failed:", result.reason);
+                // Log errors
+                for (const result of results) {
+                    if (result.status === "rejected") {
+                        console.error("Leave message failed:", result.reason);
+                    }
                 }
+            } catch (error) {
+                log.error("Leave message error:", error)
             }
         })
     }

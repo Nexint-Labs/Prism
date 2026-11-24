@@ -1,5 +1,6 @@
 const { logMessage } = require('#functions/discord/moderation/messageLogging');
 const { automodDeletedMessages } = require('#functions/discord/moderation/deletedMessages');
+const { log } = require('#functions/core/log.mjs');
 
 module.exports = {
     async execute(client) {
@@ -20,7 +21,7 @@ module.exports = {
                 await logMessage(message, "delete");
 
             } catch (error) {
-                console.error("Message delete moderation error:", error);
+                log.error("Message delete moderation error:", error);
             }
         });
     }

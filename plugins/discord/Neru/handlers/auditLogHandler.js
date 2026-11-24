@@ -1,5 +1,6 @@
 const { Events, AuditLogEvent } = require("discord.js");
 const { moderateContainer } = require('#functions/discord/moderation/moderateContainer');
+const { log } = require("#functions/core/log.mjs");
 
 module.exports = {
     async execute(client) {
@@ -59,7 +60,7 @@ module.exports = {
                         return;
                 }
             } catch (error) {
-                console.error("Audit log handler error:", error);
+                log.error("Audit log handler error:", error);
             }
         });
     }
