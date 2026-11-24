@@ -7,7 +7,7 @@ const { replyContainer } = require('#functions/discord/container/replyContainer'
 const { warning } = require('#config/discord/visual/botAssets');
 const { createContainer } = require('#functions/discord/container/container');
 const { handleInteractionError } = require('#functions/discord/helpers/handleInteractionError');
-const { pluralValues } = require('#functions/discord/core/pluralValues');
+const { pluralValues, prefix } = require('#functions/discord/core/pluralValues');
 const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
 const { optOutChkSingle } = require('#functions/discord/opt-out/optOut');
 const { postAPI, queryAPI } = require('#functions/discord/api/fetch');
@@ -342,31 +342,31 @@ module.exports = {
 
 				// lose text
 				if (shortened) {
-					msg = `You have lost ${(abbrevBalance(transfer)).displayValue} coin${pluralValues(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.displayValue}`;
+					msg = `You have lost ${(abbrevBalance(transfer)).displayValue} ${prefix(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.displayValue)}`;
 				} else {
-					msg = `You have lost ${transfer} coin${pluralValues(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew bank balance: ${newCoinAmt.value}`;
+					msg = `You have lost ${transfer} ${prefix(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew bank balance: ${newCoinAmt.value}`;
 				}
 			} else if (lost === false) {
 
 				// win text
 				if (shortened) {
-					msg = `You have won ${(abbrevBalance(transfer)).displayValue} coin${pluralValues(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.displayValue}`;
+					msg = `You have won ${(abbrevBalance(transfer)).displayValue} ${prefix(transfer)}}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.displayValue)}`;
 				} else {
-					msg = `You have won ${transfer} coin${pluralValues(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew bank balance: ${newCoinAmt.value}`;
+					msg = `You have won ${transfer} ${prefix(transfer)}}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew bank balance: ${newCoinAmt.value}`;
 				}
 			} else if (lost === "tie") {
 
 				// tied text
 				if (shortened) {
-					msg = `You have tied against the bot, and have not gained or lost anything.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.displayValue}`;
+					msg = `You have tied against the bot, and have not gained or lost anything.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.displayValue)}`;
 				} else {
-					msg = `You have tied against the bot, and have not gained or lost anything.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.value}`;
+					msg = `You have tied against the bot, and have not gained or lost anything.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.value} ${prefix(newCoinAmt.displayValue)}`;
 				}
 			} else {
 				if (shortened) {
-					msg = `You have bet ${(abbrevBalance(transfer)).displayValue} coin${pluralValues(transfer)}.\n\nDealer: ${dealer.cards[0]}, ???\nPlayer: ${playercards} (${player.cardTotal})`;
+					msg = `You have bet ${(abbrevBalance(transfer)).displayValue} ${prefix(transfer)}}.\n\nDealer: ${dealer.cards[0]}, ???\nPlayer: ${playercards} (${player.cardTotal})`;
 				} else {
-					msg = `You have bet ${transfer} coin${pluralValues(transfer)}.\n\nDealer: ${dealer.cards[0]}, ???\nPlayer: ${playercards} (${player.cardTotal})`;
+					msg = `You have bet ${transfer} ${prefix(transfer)}}.\n\nDealer: ${dealer.cards[0]}, ???\nPlayer: ${playercards} (${player.cardTotal})`;
 				}
 			}
 

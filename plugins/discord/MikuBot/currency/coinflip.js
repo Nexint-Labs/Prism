@@ -9,7 +9,7 @@ const { warning, loading } = require('#config/discord/visual/botAssets');
 const { replyContainer } = require('#functions/discord/container/replyContainer')
 const { createContainer } = require('#functions/discord/container/container');
 const { emoji } = require('#config/discord/visual/emoji');
-const { pluralValues } = require('#functions/discord/core/pluralValues');
+const { pluralValues, prefix } = require('#functions/discord/core/pluralValues');
 const delay = require('#functions/core/delay');
 const { postAPI, queryAPI } = require('#functions/discord/api/fetch');
 const { getUsername } = require('#functions/discord/core/getUsername');
@@ -171,7 +171,7 @@ module.exports = {
 		await replyContainer(
 			interaction,
 			"Coinflip",
-			[`Coinflipping ${(abbrevBalance(Math.abs(addedCoins))).displayValue} coin${pluralValues(Math.abs(addedCoins))} [${emoji.loadEmoji}]`],
+			[`Coinflipping ${(abbrevBalance(Math.abs(addedCoins))).displayValue} ${prefix(Math.abs(addedCoins))} [${emoji.loadEmoji}]`],
 			"default",
 			loading,
 			{
@@ -191,14 +191,14 @@ module.exports = {
 			// Prepare message
 			let msg = "";
 			if (shortened) {
-				msg = `You decided to coinflip ${addedCoins.displayValue} coin${pluralValues(addedCoins.value)} and landed ${coinToss}, doubling your coins.\nYour updated balance: ${newCoinAmt.displayValue} coin${pluralValues(newCoinAmt.value)}.`
+				msg = `You decided to coinflip ${addedCoins.displayValue} ${prefix(addedCoins.value)} and landed ${coinToss}, doubling your ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.value)}.`
 				if (addedCoins.value < 0) {
-					msg = `You decided to coinflip ${(abbrevBalance(addedCoins.value * -1)).displayValue} coin${pluralValues(addedCoins.displayValue)} and landed ${coinToss}, losing all of your wagered coin${pluralValues(newCoinAmt.value)}.\nYour updated balance: ${newCoinAmt.displayValue} coin${pluralValues(newCoinAmt.value)}.`
+					msg = `You decided to coinflip ${(abbrevBalance(addedCoins.value * -1)).displayValue} ${prefix(addedCoins.value)} and landed ${coinToss}, losing all of your wagered ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.value)}.`
 				}
 			} else {
-				msg = `You decided to coinflip ${addedCoins.value} coin${pluralValues(addedCoins.value)} and landed ${coinToss}, doubling your coins.\nYour updated balance: ${newCoinAmt.value} coin${pluralValues(newCoinAmt.value)}.`
+				msg = `You decided to coinflip ${addedCoins.value} ${prefix(addedCoins.value)} and landed ${coinToss}, doubling your ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.value} ${prefix(newCoinAmt.value)}.`
 				if (addedCoins.value < 0) {
-					msg = `You decided to coinflip ${Math.abs(addedCoins.value)} coin${pluralValues(addedCoins.value)} and landed ${coinToss}, losing all of your wagered coins.\nYour updated balance: ${newCoinAmt.value} coin${pluralValues(newCoinAmt.value)}.`
+					msg = `You decided to coinflip ${Math.abs(addedCoins.value)} ${prefix(addedCoins.value)} and landed ${coinToss}, losing all of your wagered ${prefix(addedCoins.value)}.\nYour updated balance: ${newCoinAmt.value} ${prefix(newCoinAmt.value)}.`
 				}
 			}
 			if (level > 0) {

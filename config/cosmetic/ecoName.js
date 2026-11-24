@@ -1,5 +1,5 @@
 module.exports = {
-    singular: "stardust",
-    plural: "stardust",
+    singular: "Stardust",
+    plural: "Stardust",
     symbol: "✦"
 }
