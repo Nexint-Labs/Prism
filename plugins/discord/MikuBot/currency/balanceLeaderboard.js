@@ -11,8 +11,8 @@ module.exports = {
 	cooldown: 5,
 
 	data: new SlashCommandBuilder()
-		.setName('baltop')
-		.setDescription('Views balance of the top people, globally.')
+		.setName('top')
+		.setDescription(`Views the leaderboard of the top people on economy.`)
 		.addStringOption(option =>
 			option.setName('leaderboard')
 				.setDescription('The leaderboard to view.')

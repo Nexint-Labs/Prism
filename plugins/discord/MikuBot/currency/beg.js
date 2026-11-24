@@ -16,7 +16,7 @@ module.exports = {
 	cooldown: 30,
 	data: new SlashCommandBuilder()
 		.setName('beg')
-		.setDescription('Beg to gain money for the balance system. Cooldown of 30 seconds.'),
+		.setDescription(`Beg to gain ${prefix(0, true, false)} for the balance system.`),
 	async execute(interaction) {
 
 		// defer reply
@@ -74,7 +74,7 @@ module.exports = {
 			// Prepare message
 			let msg = "";
 			if (shortened) {
-				msg = `You decided to beg and got ${addedCoins.displayValue} ${prefix(addedCoins.value)}.\n\nYour updated balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.value)}}.`;
+				msg = `You decided to beg and got ${addedCoins.displayValue} ${prefix(addedCoins.value)}.\n\nYour updated balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.value)}.`;
 				if (addedCoins.value == 0) {
 					msg = `You decided to beg, but got ABSOLUTELY NOTHING BOZO.\n\nYour updated balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.value)}.`
 				} else if (reward.massiveTip) {

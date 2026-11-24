@@ -20,16 +20,16 @@ module.exports = {
 		.setDescription('Play blackjack. WIP.')
 		.addIntegerOption(option =>
 			option
-				.setName('coins')
-				.setDescription('The coin amount to bet.'))
+				.setName(`${prefix(1, false, false)}`)
+				.setDescription(`The ${prefix(1, true, false)} amount to bet.`))
 		.addIntegerOption(option =>
 			option
 				.setName('zeros')
-				.setDescription('The amount of zeroes behind.'))
+				.setDescription('The amount of zeroes behind. (Sci-Notation)'))
 		.addStringOption(option =>
 			option
 				.setName('all')
-				.setDescription('Bet all coins?')
+				.setDescription(`Bet all ${prefix(0, true, false)}?`)
 				.addChoices(
 					{ name: 'True', value: 'true' },
 				)),
@@ -64,9 +64,9 @@ module.exports = {
 		// balance check
 		let transfer;
 		if (interaction.options.getInteger("zeros") === null) {
-			transfer = interaction.options.getInteger("coins");
+			transfer = interaction.options.getInteger(`${prefix(1, false, false)}`);
 		} else {
-			transfer = interaction.options.getInteger("coins") * Math.pow(10, interaction.options.getInteger("zeros"));
+			transfer = interaction.options.getInteger(`${prefix(1, false, false)}`) * Math.pow(10, interaction.options.getInteger("zeros"));
 		}
 		if (interaction.options.getString("all") === "true") {
 			const result = await queryAPI("/currency/update/balance", {
@@ -352,7 +352,7 @@ module.exports = {
 				if (shortened) {
 					msg = `You have won ${(abbrevBalance(transfer)).displayValue} ${prefix(transfer)}}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew balance: ${newCoinAmt.displayValue} ${prefix(newCoinAmt.displayValue)}`;
 				} else {
-					msg = `You have won ${transfer} ${prefix(transfer)}}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew bank balance: ${newCoinAmt.value}`;
+					msg = `You have won ${transfer} ${prefix(transfer)}.\n\nDealer: ${dealercards} (${dealer.cardTotal})\nPlayer: ${playercards} (${player.cardTotal})\n\nNew bank balance: ${newCoinAmt.value}`;
 				}
 			} else if (lost === "tie") {
 
@@ -366,7 +366,7 @@ module.exports = {
 				if (shortened) {
 					msg = `You have bet ${(abbrevBalance(transfer)).displayValue} ${prefix(transfer)}.\n\nDealer: ${dealer.cards[0]}, ???\nPlayer: ${playercards} (${player.cardTotal})`;
 				} else {
-					msg = `You have bet ${transfer} ${prefix(transfer)}}.\n\nDealer: ${dealer.cards[0]}, ???\nPlayer: ${playercards} (${player.cardTotal})`;
+					msg = `You have bet ${transfer} ${prefix(transfer)}.\n\nDealer: ${dealer.cards[0]}, ???\nPlayer: ${playercards} (${player.cardTotal})`;
 				}
 			}
 

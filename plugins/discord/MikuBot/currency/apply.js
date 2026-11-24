@@ -17,7 +17,7 @@ module.exports = {
     cooldown: 30,
     data: new SlashCommandBuilder()
         .setName('apply')
-        .setDescription('Apply for a job!'),
+        .setDescription(`Apply for a job to earn ${prefix(0, true, false)}`),
     async execute(interaction) {
         const response = await interaction.deferReply({
             withResponse: true,
