@@ -10,6 +10,7 @@ const { warning } = require('#config/discord/visual/botAssets');
 const { createContainer } = require('#functions/discord/container/container');
 const { postAPI } = require('#functions/discord/api/fetch');
 const { getUsername } = require('#functions/discord/core/getUsername');
+const { prefix } = require('#functions/discord/core/pluralValues');
 
 module.exports = {
 	cooldown: 30,

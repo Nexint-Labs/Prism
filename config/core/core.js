@@ -24,7 +24,7 @@ module.exports = {
     Types: warn, shutdown, continue
     */
     errorPolicy: {
-        uncaughtException: "shutdown",
+        uncaughtException: "warn",
         unhandledRejection: "warn",
     }
 }

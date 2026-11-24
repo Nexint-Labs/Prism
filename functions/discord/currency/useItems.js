@@ -6,6 +6,7 @@ const { abbrevBalance } = require('#functions/discord/helpers/abbrevValues');
 const { pluralValues } = require('#functions/discord/core/pluralValues');
 const { dmNotify } = require('#functions/discord/notify/dmNotify');
 const { getAPI, postAPI } = require('#functions/discord/api/fetch');
+const { pluralValues, prefix } = require('#functions/discord/core/pluralValues');
 
 const useItem = async function (itemList, interaction, qty, guildMember, response) {
 
