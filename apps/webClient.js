@@ -10,6 +10,7 @@ const { spawn } = require("node:child_process");
 let socket = null;
 let reconnectTimer = null;
 let shuttingDown = false;
+let retryCount = 0;
 
 function connect() {
     if (shuttingDown) return;
@@ -18,6 +19,7 @@ function connect() {
     const ws = socket;
 
     ws.on("open", () => {
+        retryCount = 0;
         log.event(`Connected to ${frameName} API.`);
     });
 
@@ -71,21 +73,39 @@ function connect() {
             });
             await reload("Remote Reload")
         }
+        if (data.type === "getMemory") {
+            const memory = process.memoryUsage();
+
+            ws.send(JSON.stringify({
+                type: "memory",
+                value: {
+                    pid: process.pid,
+                    rss: memory.rss,
+                    heapUsed: memory.heapUsed,
+                    heapTotal: memory.heapTotal,
+                    external: memory.external,
+                    uptime: process.uptime()
+                }
+            }));
+        }
     });
 
     ws.on("error", (error) => {
-        log.warn(`WebSocket error: ${error.message}`);
+        if (retryCount < 3) log.warn(`WebSocket error: ${error.message}`);
     });
 
     ws.on("close", () => {
         if (shuttingDown || socket !== ws) return;
 
-        log.warn("WebSocket disconnected. Retrying in 5 seconds...");
+        if (retryCount < 3) log.warn("WebSocket disconnected. Retrying in 5 seconds...");
+
+        if (retryCount == 3) log.warn("WebSocket disconnected.");
 
         reconnectTimer = setTimeout(() => {
             reconnectTimer = null;
             connect();
         }, 5000);
+        retryCount += 1;
     });
 }
 

@@ -160,7 +160,7 @@ const main = async () => {
     } else {
         log.success(`Done in ${(elapsed / 1000).toFixed(3)} seconds!`);
     }
-    console.log("Bot is running.")
+    console.log("Server is running.")
 
     await updateCheck(true)
 
