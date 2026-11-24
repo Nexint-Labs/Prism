@@ -17,10 +17,10 @@ const pluralValues = function(input){
  * Determines the prefix for the bot lol
  * @param {Number} input 
  * @param {Boolean} ext // optional, assumed true
- * @param {Boolean} caps // assumed false, caps or not
+ * @param {Boolean} caps // assumed true, caps or not
  * @returns 
  */
-const prefix = function(input, ext = true, caps = false){
+const prefix = function(input, ext = true, caps = true){
     let prefix = plural;
     if(input == 1){
         prefix = singular
