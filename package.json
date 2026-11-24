@@ -1,14 +1,16 @@
 {
-  "name": "nexapiv2",
-  "version": "1.0.0",
-  "description": "",
+  "name": "prism-framework",
+  "version": "0.7.3-dev",
+  "description": "Node.js framework lol",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "node --test"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Nexint",
+  "license": "UNLICENSED",
+  "private": true,
   "type": "commonjs",
   "dependencies": {
     "chalk": "^6.0.1",
