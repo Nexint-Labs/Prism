@@ -3,7 +3,7 @@ const { optOutChkSingle } = require('#functions/discord/opt-out/optOut');
 const { User } = require('discord.js');
 const { getUsername } = require('../core/getUsername');
 const { postAPI } = require('../api/fetch');
-const { log } = require('../../core/log.mjs');
+const { log } = require("#functions/core/log.mjs");
 
 /**
  * Gain EXP lol

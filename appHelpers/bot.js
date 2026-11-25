@@ -4,7 +4,8 @@ const { loadCommands, deployCommands } = require('#functions/discord/load');
 const { discordToken: token, botStatus, botActivity, botType, intents, partials } = require('#config/discord/discord');
 const { log } = require('#functions/core/log.mjs');
 const fileLog = require('#preload/core/fileLog');
-const { errorPolicy } = require('#config/core/core');
+const { getConfig } = require("#functions/core/getConfig");
+const { errorPolicy } = getConfig("core/core");
 
 const bot = async function () {
     await fileLog.execute()

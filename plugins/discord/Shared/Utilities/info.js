@@ -10,9 +10,11 @@ const { abbrevBalance } = require('#functions/discord/helpers/abbrevValues');
 const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
 
 // config
-const { frameName, frameVer, frameID } = require('#config/core/core');
+const { frameName, frameVer, frameID } = require("@nexint/lumina/framework")
 const { loadAnim } = require('#functions/discord/helpers/load');
-const { pluginName, pluginVer } = require('#config/cosmetic/config');
+
+const { getConfig } = require("#functions/core/getConfig");
+const { pluginName, pluginVer } = getConfig("cosmetic/config");
 const { getUpdateVersion } = require('#functions/core/update');
 
 module.exports = {

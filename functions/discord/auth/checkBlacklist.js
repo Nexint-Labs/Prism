@@ -1,7 +1,8 @@
 let blacklist = null;
 let date = Math.floor(Date.now() / 1000);
 const { apiServer, delay, apiName } = require('#config/discord/api/NexAPI');
-const { devName } = require('#config/core/core');
+const { getConfig } = require("#functions/core/getConfig");
+const { devName } = getConfig("core/core");
 const { warning } = require('#config/discord/visual/botAssets');
 const { getAPI } = require('#functions/discord/api/fetch');
 const { replyContainer } = require('#functions/discord/container/replyContainer');

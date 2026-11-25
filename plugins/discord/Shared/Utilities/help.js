@@ -1,9 +1,10 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { simpleMenu } = require('#functions/discord/container/menus/pageHandler');
 const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
-const { devMode } = require('#config/core/core');
 const { devId } = require('#config/discord/discord');
-const { pluginName } = require('#config/cosmetic/config');
+const { getConfig } = require("#functions/core/getConfig");
+const { pluginName } = getConfig("cosmetic/config");
+const { devMode } = getConfig("core/core");
 
 module.exports = {
 	cooldown: 3,

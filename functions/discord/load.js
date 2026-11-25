@@ -1,9 +1,10 @@
 const fs = require("node:fs");
 const path = require('path');
-const { log } = require("../core/log.mjs");
+const { log } = require("#functions/core/log.mjs");
 const { Client, REST, Collection, Routes } = require("discord.js");
 const { clientId } = require("#config/discord/discord");
-const { verbose, errorPolicy } = require("#config/core/core");
+const { getConfig } = require("#functions/core/getConfig");
+const { verbose, errorPolicy } = getConfig("core/core");
 const { forceShutdown } = require("#functions/core/fatalShutdown.mjs");
 
 

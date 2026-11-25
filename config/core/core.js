@@ -1,30 +1,4 @@
 module.exports = {
-    devMode: false, // Determines dev mode?
-    devMsg: "This bot is running in dev mode. Developer functions are enabled.",
-    devName: "Nexint",
-    dateOptions: {
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-    },
-    verbose: false, // Extra Logging Info
-    autoUpdate: true,
-    frameName: "Lumina ☆", // Unified Framework Name
-    frameVer: "0.7.5-dev", // Unified Framework version
-    frameID: 24, // Framework version ID
-    updateURL: "https://github.com/Nexint-Labs/Lumina/",
-    updateSource: "https://raw.githubusercontent.com/Nexint-Labs/Lumina/refs/heads/main", // prolly dont change this unless you know what ur doing
-
-    restart: "start start.bat", // Restart command. This would be different on a linux based system. It would be "sh start.sh".
-    // args: ['--', 'bash', '-c', "./start.sh"],
-
-    /*
-    It's in your best interest to not change this unless you know what you're doing.
-    Please don't change this :sob:
-    Types: warn, shutdown, continue
-    */
-    errorPolicy: {
-        uncaughtException: "shutdown",
-        unhandledRejection: "warn",
-    }
-}
+    devMode: true,
+    verbose: true
+};

@@ -12,7 +12,8 @@ const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
 const { optOutChkSingle } = require('#functions/discord/opt-out/optOut');
 const { postAPI, queryAPI } = require('#functions/discord/api/fetch');
 const { getUsername } = require('#functions/discord/core/getUsername');
-const { pluginName } = require('#config/cosmetic/config');
+const { getConfig } = require("#functions/core/getConfig");
+const { pluginName } = getConfig("cosmetic/config");
 const { log } = require('#functions/core/log.mjs');
 
 module.exports = {

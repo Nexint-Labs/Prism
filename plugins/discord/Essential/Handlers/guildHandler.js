@@ -4,7 +4,9 @@ const { blacklistServerCheck } = require('#functions/discord/auth/checkServerBla
 
 const { sendMessage } = require('#functions/discord/container/shardInfo');
 const { inviteChannelID } = require('#config/discord/discord');
-const { pluginName } = require('#config/cosmetic/config');
+
+const { getConfig } = require("#functions/core/getConfig");
+const { pluginName } = getConfig("cosmetic/config");
 const { log } = require('#functions/core/log.mjs');
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));

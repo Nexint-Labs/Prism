@@ -1,7 +1,8 @@
-const { devMode, verbose } = require('#config/core/core');
+const { getConfig } = require("#functions/core/getConfig");
+const { devMode, verbose } = getConfig("core/core");
 const { ClusterManager, AutoResharderManager, ReClusterManager } = require('discord-hybrid-sharding');
 const { discordToken: token } = require('#config/discord/discord');
-const { sourceDir } = require('#index');
+const { root: sourceDir } = require("#functions/core/dirs");
 const { log } = require('#functions/core/log.mjs');
 const { forceShutdown } = require('#functions/core/fatalShutdown.mjs');
 
@@ -13,9 +14,11 @@ let manager = null;
 let shuttingDown = false;
 
 if (devMode) {
+    /*
     totalShards = 4;
     totalClusters = 2;
     shardsPerClusters = 2;
+    */
 }
 
 function createManager() {
@@ -118,7 +121,7 @@ module.exports = {
             throw new Error(result2.error);
         }
     },
-    async reload() {
+    async refresh() {
         await manager.recluster.start({
             restartMode: 'gracefulSwitch'
         });

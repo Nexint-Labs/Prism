@@ -1,4 +1,6 @@
-const { botName, botFile } = require("#config/core/core")
+const { getConfig } = require("#functions/core/getConfig");
+
+const { pluginName, pluginFile } = getConfig("cosmetic/config");
 
 // Just an alternate way to construct!
 // This is pre-configured with my file host :P
@@ -11,8 +13,8 @@ const host = baseURL + endpoint + key
 
 module.exports = {
     pfp: {
-        desc: `${botName}bot PFP`,
-        url: `${host}${botFile}${modifiers}`,
+        desc: `${pluginName}bot PFP`,
+        url: `${host}${pluginFile}${modifiers}`,
     },
     warning: {
         desc: `Warning`,

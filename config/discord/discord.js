@@ -1,5 +1,7 @@
-const { devName } = require("#config/core/core");
-const { pluginName } = require("#config/cosmetic/config");
+const { getConfig } = require("#functions/core/getConfig");
+
+const { devName } = getConfig("core/core");
+const { pluginName } = getConfig("cosmetic/config");
 const { date } = require("#functions/core/date")
 const { GatewayIntentBits, Partials, ActivityType } = require("discord.js");
 

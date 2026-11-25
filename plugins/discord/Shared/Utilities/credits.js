@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { replyContainer } = require('#functions/discord/container/replyContainer');
-const { pluginName } = require('#config/cosmetic/config');
+const { getConfig } = require("#functions/core/getConfig");
+const { pluginName } = getConfig("cosmetic/config");
 
 module.exports = {
     cooldown: 5,

@@ -1,8 +1,10 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const { updateURL } = require('#config/core/core');
+const { updateURL } = require("@nexint/lumina/framework")
 const { replyContainer } = require('#functions/discord/container/replyContainer');
 const { checkBlacklist } = require('#functions/discord/auth/checkBlacklist');
-const { pluginName } = require('#config/cosmetic/config');
+
+const { getConfig } = require("#functions/core/getConfig");
+const { pluginName } = getConfig("cosmetic/config");
 
 
 module.exports = {

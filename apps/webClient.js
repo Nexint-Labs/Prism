@@ -1,5 +1,7 @@
-const { frameName, frameVer, frameID, restart } = require("#config/core/core");
-const { pluginName, pluginVer } = require("#config/cosmetic/config");
+const { getConfig } = require("#functions/core/getConfig");
+const { frameName, frameVer, frameID } = require("@nexint/lumina/framework");
+const { restart } = getConfig("core/core");
+const { pluginName, pluginVer } = getConfig("cosmetic/config");
 const { apiServer } = require("#config/discord/api/NexAPI");
 const { log } = require("#functions/core/log.mjs");
 const { gracefulShutdown, refreshCycle, reload } = require("#functions/core/powerCycle");

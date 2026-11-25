@@ -1,5 +1,5 @@
 
-const { frameName } = require('#config/core/core');
+const { frameName } = require("@nexint/lumina/framework");
 const { randomInt } = require('node:crypto');
 
 const API = 'https://vocadb.net/api';

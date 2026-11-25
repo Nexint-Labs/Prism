@@ -1,5 +1,5 @@
 const { apiServer, delay, header, apiToken, apiExt } = require('#config/discord/api/NexAPI');
-const { log } = require('../../core/log.mjs');
+const { log } = require("#functions/core/log.mjs");
 const { NexAPIError } = require('#functions/discord/errors/NexAPIError');
 
 /**

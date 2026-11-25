@@ -13,6 +13,7 @@
   "private": true,
   "type": "commonjs",
   "dependencies": {
+    "@nexint/lumina": "^0.7.7",
     "chalk": "^6.0.1",
     "discord-hybrid-sharding": "^3.0.1",
     "discord.js": "^14.28.1",
@@ -26,14 +27,21 @@
     "ws": "^8.23.0"
   },
   "imports": {
+    "#functions/core/*": "@nexint/lumina/core/*",
+    "#functions/core/*.mjs": "@nexint/lumina/core/*.mjs",
+    "#config/core/framework": "@nexint/lumina/framework",
     "#config/*": "./config/*.js",
     "#functions/*": "./functions/*.js",
     "#functions/*.mjs": "./functions/*.mjs",
     "#preload/*": "./preload/*.js",
+    "#preload/core/fileLog": "@nexint/lumina/preload/core/fileLog",
     "#console/*": "./console/*.js",
     "#bot": "./bot.js",
     "#index": "./boot.js",
     "#apps/*": "./apps/*.js",
     "#appHelpers/*": "./appHelpers/*.js"
+  },
+  "allowScripts": {
+    "sqlite3@6.0.1": true
   }
 }
