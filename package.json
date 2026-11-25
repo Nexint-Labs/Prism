@@ -13,7 +13,7 @@
   "private": true,
   "type": "commonjs",
   "dependencies": {
-    "@nexint/lumina": "^0.7.8",
+    "@nexint/lumina": "^0.7.9",
     "chalk": "^6.0.1",
     "discord-hybrid-sharding": "^3.0.1",
     "discord.js": "^14.28.1",
